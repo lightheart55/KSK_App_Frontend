@@ -28,7 +28,8 @@
             <h1>Khám Sức Khỏe</h1>
             <div class="user-info">
                 <span>👤 <span id="user-fullname">Admin</span></span>
-                <button class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--danger)" onclick="logout()">Thoát</button>
+                <button class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--info); margin-left: 10px;" onclick="exportExcel()">📥 Xuất Excel</button>
+                <button class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--danger); margin-left: 5px;" onclick="logout()">Thoát</button>
             </div>
         </header>
 
@@ -282,6 +283,16 @@
                 btn.disabled = false;
                 btn.innerText = "💾 LƯU DỮ LIỆU";
             }
+        }
+
+        // Tải File Excel
+        function exportExcel() {
+            const token = localStorage.getItem('token');
+            if(!token) return alert('Chưa đăng nhập!');
+            
+            // Chuyển hướng trình duyệt sang đường dẫn API để tải file về
+            // Chèn token vào query parameter
+            window.location.href = `/api/export?token=${token}`;
         }
     </script>
 </body>
