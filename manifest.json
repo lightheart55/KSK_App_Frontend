@@ -1,0 +1,15 @@
+{
+  "name": "App Khám Sức Khỏe",
+  "short_name": "KSK App",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "https://ui-avatars.com/api/?name=KSK&background=10b981&color=fff&size=192",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

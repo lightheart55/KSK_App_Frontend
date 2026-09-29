@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phần Mềm Quản Lý Khám Sức Khỏe</title>
+    <meta name="theme-color" content="#10b981">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        /* Design System Core */
+        :root {
+          --primary: #10b981;
+          --secondary: #0f172a;
+          --bg: #f1f5f9;
+        }
+        body, html {
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            background: var(--bg);
+            font-family: -apple-system, sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .card {
+            background: #fff; padding: 30px; border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 90%; max-width: 400px;
+        }
+        input {
+            width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 8px;
+            border: 1px solid #cbd5e1; box-sizing: border-box;
+        }
+        button {
+            width: 100%; padding: 12px; background: var(--primary); color: #fff;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+        }
+        #app { display: none; width: 100%; height: 100%; }
+        iframe { width: 100%; height: 100%; border: none; }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="card">
+        <h2 style="color: var(--secondary); text-align: center;">Đăng Nhập</h2>
+        <input type="text" id="username" placeholder="Tên đăng nhập">
+        <input type="password" id="password" placeholder="Mật khẩu">
+        <button onclick="login()">Đăng Nhập</button>
+        <p id="msg" style="color: red; text-align: center; font-size: 0.9em;"></p>
+    </div>
+
+    <!-- Main App Screen (Iframe tới GAS hoặc tự render UI) -->
+    <div id="app">
+        <!-- Sau khi deploy GAS Web App, bạn dán link script.google.com vào đây nếu dùng iframe -->
+        <!-- Hoặc dùng Javascript fetch() để build UI thật -->
+        <h2 style="text-align:center; padding: 20px;">Giao diện nhập liệu sẽ nằm ở đây</h2>
+        <button onclick="logout()" style="width:200px; margin: 0 auto; display:block;">Đăng Xuất</button>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyV-jh8obb7pHIejIG9OrHTQpfujtnaIPlROmW4bBrwOhBY00y5h4kSUwQtkylluAaBMQ/exec'; // API từ Apps Script
+
+        async function login() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const msg = document.getElementById('msg');
+            
+            msg.innerText = "Đang kiểm tra...";
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'login', username: u, password: p }),
+                    // LƯU Ý: Vercel/GAS có thể yêu cầu header hoặc mode: 'no-cors' nhưng GAS trả JSON nên ta dùng mặc định (nếu fetch trực tiếp từ domain khác có thể dính CORS, nhưng POST mode 'no-cors' không lấy được JSON response. Ta cứ thử mặc định, GAS hỗ trợ CORS nếu setup đúng).
+                }).then(r => r.json());
+                
+                if(res.success) {
+                    localStorage.setItem('token', res.token);
+                    localStorage.setItem('user', JSON.stringify(res.user));
+                    showApp();
+                } else {
+                    msg.innerText = res.message;
+                }
+            } catch (err) {
+                msg.innerText = "Lỗi kết nối tới Server: " + err;
+            }
+
+        }
+
+        function showApp() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        // PWA Setup
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+    </script>
+</body>
+</html>
