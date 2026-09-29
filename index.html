@@ -3,86 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Phần Mềm Quản Lý Khám Sức Khỏe</title>
+    <title>Quản Lý Khám Sức Khỏe</title>
     <meta name="theme-color" content="#10b981">
     <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <style>
-        /* Design System Core */
-        :root {
-          --primary: #10b981;
-          --secondary: #0f172a;
-          --bg: #f1f5f9;
-        }
-        body, html {
-            margin: 0; padding: 0;
-            width: 100vw; height: 100vh;
-            background: var(--bg);
-            font-family: -apple-system, sans-serif;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .card {
-            background: #fff; padding: 30px; border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 90%; max-width: 400px;
-        }
-        input {
-            width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 8px;
-            border: 1px solid #cbd5e1; box-sizing: border-box;
-        }
-        button {
-            width: 100%; padding: 12px; background: var(--primary); color: #fff;
-            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
-        }
-        #app { display: none; width: 100%; height: 100%; }
-        iframe { width: 100%; height: 100%; border: none; }
-    </style>
+    <link rel="stylesheet" href="theme.css">
 </head>
 <body>
     <!-- Login Screen -->
-    <div id="login-screen" class="card">
-        <h2 style="color: var(--secondary); text-align: center;">Đăng Nhập</h2>
-        <input type="text" id="username" placeholder="Tên đăng nhập">
-        <input type="password" id="password" placeholder="Mật khẩu">
-        <button onclick="login()">Đăng Nhập</button>
-        <p id="msg" style="color: red; text-align: center; font-size: 0.9em;"></p>
+    <div id="login-screen" class="container" style="max-width: 400px; margin-top: 10vh;">
+        <div class="card">
+            <h2 style="text-align: center; color: var(--secondary); margin-top:0;">Đăng Nhập</h2>
+            <label>Tên đăng nhập</label>
+            <input type="text" id="username" class="form-control" placeholder="Nhập tài khoản">
+            <label>Mật khẩu</label>
+            <input type="password" id="password" class="form-control" placeholder="Nhập mật khẩu">
+            <button class="btn" style="width: 100%" onclick="login()">Đăng Nhập</button>
+            <p id="msg" style="color: red; text-align: center; font-size: 0.9em; margin-top: 15px;"></p>
+        </div>
     </div>
 
-    <!-- Main App Screen (Iframe tới GAS hoặc tự render UI) -->
-    <div id="app">
-        <!-- Sau khi deploy GAS Web App, bạn dán link script.google.com vào đây nếu dùng iframe -->
-        <!-- Hoặc dùng Javascript fetch() để build UI thật -->
-        <h2 style="text-align:center; padding: 20px;">Giao diện nhập liệu sẽ nằm ở đây</h2>
-        <button onclick="logout()" style="width:200px; margin: 0 auto; display:block;">Đăng Xuất</button>
+    <!-- Main App Screen -->
+    <div id="app" class="container" style="display: none;">
+        <header>
+            <h1>Khám Sức Khỏe</h1>
+            <div class="user-info">
+                <span>👤 <span id="user-fullname">Admin</span></span>
+                <button class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--danger)" onclick="logout()">Thoát</button>
+            </div>
+        </header>
+
+        <!-- Tabs -->
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="switchTab('tab-hanhchinh')">1. Hành Chính</button>
+            <button class="nav-btn" onclick="switchTab('tab-tien-su')">2. Tiền Sử Bệnh</button>
+            <button class="nav-btn" onclick="switchTab('tab-lamsang')">3. Lâm Sàng</button>
+            <button class="nav-btn" onclick="switchTab('tab-canlamsang')">4. Cận Lâm Sàng & Kết Luận</button>
+        </div>
+
+        <!-- Form -->
+        <form id="ksk-form" onsubmit="submitForm(event)">
+            
+            <!-- Tab 1: Hành chính -->
+            <div id="tab-hanhchinh" class="panel active card">
+                <h3 style="margin-top:0; color:var(--info);">Thông tin chung</h3>
+                <div class="grid-2">
+                    <div>
+                        <label>Mã CS KCB (*)</label>
+                        <input type="text" id="ma_cskcb" class="form-control" required value="8934286045450">
+                    </div>
+                    <div>
+                        <label>Ngày khám (*)</label>
+                        <input type="date" id="ngay_kham" class="form-control" required>
+                    </div>
+                    <div>
+                        <label>Họ và tên (*)</label>
+                        <input type="text" id="ho_ten" class="form-control" required>
+                    </div>
+                    <div>
+                        <label>Giới tính (*)</label>
+                        <select id="gioi_tinh" class="form-control" required>
+                            <option value="">-- Chọn --</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Ngày sinh (*)</label>
+                        <input type="date" id="ngay_sinh" class="form-control" required>
+                    </div>
+                    <div>
+                        <label>CCCD / Mã định danh</label>
+                        <input type="text" id="cccd" class="form-control">
+                    </div>
+                    <div>
+                        <label>Điện thoại</label>
+                        <input type="tel" id="dien_thoai" class="form-control">
+                    </div>
+                    <div>
+                        <label>Dân tộc</label>
+                        <input type="text" id="dan_toc" class="form-control" value="Kinh">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Tiền sử -->
+            <div id="tab-tien-su" class="panel card">
+                <h3 style="margin-top:0; color:var(--info);">Tiền sử bệnh tật</h3>
+                <div class="grid-2">
+                    <div>
+                        <label>Tăng huyết áp</label>
+                        <select id="ts_tha" class="form-control">
+                            <option value="Không">Không</option>
+                            <option value="Có">Có</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Đái tháo đường</label>
+                        <select id="ts_dtd" class="form-control">
+                            <option value="Không">Không</option>
+                            <option value="Có">Có</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Lâm sàng -->
+            <div id="tab-lamsang" class="panel card">
+                <h3 style="margin-top:0; color:var(--info);">Khám thể lực & Lâm sàng</h3>
+                <div class="grid-3">
+                    <div>
+                        <label>Chiều cao (cm)</label>
+                        <input type="number" id="chieu_cao" class="form-control">
+                    </div>
+                    <div>
+                        <label>Cân nặng (kg)</label>
+                        <input type="number" id="can_nang" class="form-control">
+                    </div>
+                    <div>
+                        <label>Huyết áp (mmHg)</label>
+                        <input type="text" id="huyet_ap" class="form-control" placeholder="Ví dụ: 120/80">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <label>Khám Nội khoa</label>
+                        <input type="text" id="kham_noi" class="form-control" value="Bình thường">
+                    </div>
+                    <div>
+                        <label>Khám Ngoại khoa</label>
+                        <input type="text" id="kham_ngoai" class="form-control" value="Bình thường">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Cận lâm sàng & Kết luận -->
+            <div id="tab-canlamsang" class="panel card">
+                <h3 style="margin-top:0; color:var(--info);">Kết luận</h3>
+                <div>
+                    <label>Phân loại sức khỏe</label>
+                    <select id="phan_loai_sk" class="form-control">
+                        <option value="Loại I">Loại I</option>
+                        <option value="Loại II">Loại II</option>
+                        <option value="Loại III">Loại III</option>
+                        <option value="Loại IV">Loại IV</option>
+                        <option value="Loại V">Loại V</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Kết luận bệnh (nếu có)</label>
+                    <input type="text" id="ket_luan_benh" class="form-control" placeholder="Ghi chú bệnh tật...">
+                </div>
+
+                <div style="margin-top: 20px; text-align: right;">
+                    <p id="submit-msg" style="display:inline-block; margin-right: 15px; font-weight:bold;"></p>
+                    <button type="submit" class="btn" id="btn-submit" style="min-width: 150px;">💾 LƯU DỮ LIỆU</button>
+                </div>
+            </div>
+        </form>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyV-jh8obb7pHIejIG9OrHTQpfujtnaIPlROmW4bBrwOhBY00y5h4kSUwQtkylluAaBMQ/exec'; // API từ Apps Script
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyV-jh8obb7pHIejIG9OrHTQpfujtnaIPlROmW4bBrwOhBY00y5h4kSUwQtkylluAaBMQ/exec';
 
+        // Khởi động
+        window.onload = () => {
+            const user = localStorage.getItem('user');
+            if(user) {
+                document.getElementById('user-fullname').innerText = JSON.parse(user).fullName;
+                showApp();
+                document.getElementById('ngay_kham').valueAsDate = new Date(); // set ngày hôm nay
+            }
+        };
+
+        // Chuyển Tab
+        function switchTab(tabId) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Login
         async function login() {
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
             const msg = document.getElementById('msg');
             
-            msg.innerText = "Đang kiểm tra...";
+            if(!u || !p) { msg.innerText = "Vui lòng nhập đầy đủ"; return; }
+            msg.innerText = "Đang đăng nhập...";
+            
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'login', username: u, password: p }),
-                    // LƯU Ý: Vercel/GAS có thể yêu cầu header hoặc mode: 'no-cors' nhưng GAS trả JSON nên ta dùng mặc định (nếu fetch trực tiếp từ domain khác có thể dính CORS, nhưng POST mode 'no-cors' không lấy được JSON response. Ta cứ thử mặc định, GAS hỗ trợ CORS nếu setup đúng).
+                    body: JSON.stringify({ action: 'login', username: u, password: p })
                 }).then(r => r.json());
                 
                 if(res.success) {
                     localStorage.setItem('token', res.token);
                     localStorage.setItem('user', JSON.stringify(res.user));
-                    showApp();
+                    location.reload();
                 } else {
                     msg.innerText = res.message;
                 }
             } catch (err) {
-                msg.innerText = "Lỗi kết nối tới Server: " + err;
+                msg.innerText = "Lỗi kết nối Server: " + err;
             }
-
         }
 
         function showApp() {
@@ -95,8 +221,64 @@
             location.reload();
         }
 
-        // PWA Setup
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+        // Lưu dữ liệu
+        async function submitForm(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            const msg = document.getElementById('submit-msg');
+            
+            btn.disabled = true;
+            btn.innerText = "Đang lưu...";
+            msg.innerText = "";
+
+            // Thu thập data (Có thể map các id tương ứng cột trong excel)
+            const formData = [
+                document.getElementById('ma_cskcb').value,
+                document.getElementById('ngay_kham').value,
+                document.getElementById('ho_ten').value,
+                document.getElementById('gioi_tinh').value,
+                document.getElementById('ngay_sinh').value,
+                document.getElementById('cccd').value,
+                document.getElementById('dien_thoai').value,
+                document.getElementById('ts_tha').value,
+                document.getElementById('phan_loai_sk').value
+                // ... Thêm các trường còn lại
+            ];
+
+            const token = localStorage.getItem('token');
+            
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'submitData', token: token, data: { fields: formData } })
+                }).then(r => r.json());
+
+                if(res.success) {
+                    msg.style.color = "var(--success)";
+                    msg.innerText = "✅ Lưu thành công!";
+                    // Reset form sau 2 giây
+                    setTimeout(() => {
+                        document.getElementById('ksk-form').reset();
+                        document.getElementById('ngay_kham').valueAsDate = new Date();
+                        switchTab('tab-hanhchinh');
+                        document.querySelector('.nav-btn').classList.add('active'); // active lại nút đầu tiên
+                        msg.innerText = "";
+                        btn.disabled = false;
+                        btn.innerText = "💾 LƯU DỮ LIỆU";
+                    }, 2000);
+                } else {
+                    msg.style.color = "var(--danger)";
+                    msg.innerText = "❌ Lỗi: " + res.message;
+                    btn.disabled = false;
+                    btn.innerText = "💾 LƯU DỮ LIỆU";
+                }
+            } catch (err) {
+                msg.style.color = "var(--danger)";
+                msg.innerText = "❌ Lỗi kết nối Server";
+                btn.disabled = false;
+                btn.innerText = "💾 LƯU DỮ LIỆU";
+            }
+        }
     </script>
 </body>
 </html>

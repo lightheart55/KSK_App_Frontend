@@ -1,0 +1,145 @@
+/* ============================================
+   THEME.CSS — Bộ design system tái sử dụng
+   Nguồn: App Điểm Y Tế Tân Thuận Đông
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Brand */
+  --primary:        #10b981;
+  --primary-hover:  #059669;
+  --secondary:      #0f172a;
+
+  /* Semantic */
+  --info:    #0ea5e9;
+  --danger:  #ef4444;
+  --warning: #f59e0b;
+  --success: #22c55e;
+  --purple:  #8b5cf6;
+  --blue:    #3b82f6;
+
+  /* Neutrals */
+  --bg:         linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  --card-bg:    rgba(255,255,255,0.95);
+  --text-main:  #334155;
+  --text-muted: #64748b;
+  --border:     #cbd5e1;
+  --border-soft:#e2e8f0;
+
+  /* Shape */
+  --radius-card: 16px;
+  --radius-btn:  10px;
+  --radius-input:8px;
+
+  /* Shadow */
+  --shadow-card:  0 10px 30px -10px rgba(0,0,0,0.05);
+  --shadow-hover: 0 6px 16px rgba(16,185,129,0.3);
+  --shadow-modal: 0 20px 25px -5px rgba(0,0,0,0.1);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.container { max-width: 1000px; margin: 0 auto; }
+
+/* Header */
+header {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 25px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 15px;
+}
+
+h1 { font-size: 1.5rem; color: var(--secondary); margin: 0; font-weight: 700; }
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+}
+
+/* Button */
+.btn {
+  background: var(--primary); color: #fff; border: none;
+  padding: 12px 24px; border-radius: var(--radius-btn);
+  font-weight: 600; font-size: 0.95rem;
+  cursor: pointer; transition: 0.3s;
+}
+.btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+.btn:disabled { background:#94a3b8; cursor: not-allowed; }
+
+/* Form */
+label {
+  display: block; font-weight: 600;
+  margin-bottom: 5px; font-size: 0.85rem; color: var(--secondary);
+}
+.form-control {
+  width: 100%; padding: 9px 12px; margin-bottom: 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  font-family: inherit; font-size: 0.9rem;
+  outline: none; transition: 0.3s;
+}
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+}
+
+/* Grid */
+.grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:15px; margin-bottom:15px; }
+.grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px; margin-bottom:15px; }
+
+/* Nav Tabs */
+.nav-container {
+  display: flex; gap:5px;
+  background:#f1f5f9; padding:5px; border-radius:10px; margin-bottom: 20px;
+  overflow-x: auto;
+}
+.nav-btn {
+  border:none; background:transparent;
+  padding:8px 16px; border-radius:8px;
+  cursor:pointer; font-weight:600; white-space: nowrap;
+  color: var(--text-muted); transition:0.3s;
+}
+.nav-btn.active {
+  background:#fff; color: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Panels */
+.panel { display:none; }
+.panel.active { display:block; animation: fadeIn 0.4s ease-out forwards; }
+
+@keyframes fadeIn {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* Utils */
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.user-info { display: flex; gap: 10px; align-items: center; font-weight: 600; color: var(--primary); }
+
+@media (max-width: 768px) {
+  body { padding: 0 !important; background: #fff !important; }
+  .form-control { font-size: 16px !important; } /* chống zoom iOS */
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
