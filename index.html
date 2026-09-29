@@ -196,6 +196,8 @@
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    redirect: 'follow',
                     body: JSON.stringify({ action: 'login', username: u, password: p })
                 }).then(r => r.json());
                 
@@ -250,6 +252,8 @@
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    redirect: 'follow',
                     body: JSON.stringify({ action: 'submitData', token: token, data: { fields: formData } })
                 }).then(r => r.json());
 
