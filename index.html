@@ -41,10 +41,24 @@
             </div>
 
             <div id="tab-thongke" class="panel active">
-                <h3 class="section-title">Thống kê lượt khám theo Khóm</h3>
-                <div class="grid-3" id="stats-container">
-                    <p style="color: var(--text-muted);">Đang tải dữ liệu...</p>
+                <div style="background: var(--primary); padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; color: white; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">📊</span>
+                    <strong style="font-size: 16px;">Thống Kê Lượt Khám Theo KHÓM</strong>
                 </div>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Xem và tải danh sách lượt Khám theo từng khóm.</p>
+                
+                <table class="ts-table" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; border-spacing: 0;">
+                    <thead style="background: #e0f2fe; color: var(--text-main);">
+                        <tr>
+                            <th style="padding: 15px; font-weight: 600; text-align: left; border-bottom: 2px solid var(--primary-light);">KHU PHỐ / KHÓM</th>
+                            <th style="padding: 15px; font-weight: 600; text-align: center; border-bottom: 2px solid var(--primary-light); border-left: 1px solid var(--border); border-right: 1px solid var(--border);">SỐ HỒ SƠ ĐÃ NHẬP</th>
+                            <th style="padding: 15px; font-weight: 600; text-align: center; border-bottom: 2px solid var(--primary-light);">TẢI EXCEL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stats-tbody">
+                        <tr><td colspan="3" style="text-align:center; padding: 20px;">Đang tải dữ liệu...</td></tr>
+                    </tbody>
+                </table>
             </div>
 
             <form id="ksk-form" onsubmit="submitForm(event)">
@@ -754,8 +768,8 @@
         async function loadStats() {
             const token = localStorage.getItem('token');
             if(!token) return;
-            const container = document.getElementById('stats-container');
-            container.innerHTML = '<p style="color: var(--text-muted);">Đang tải dữ liệu từ Google Sheet...</p>';
+            const tbody = document.getElementById('stats-tbody');
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: var(--text-muted);">Đang tải dữ liệu từ Google Sheet...</td></tr>';
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
@@ -764,32 +778,48 @@
                 }).then(r => r.json());
                 
                 if(res.success) {
-                    let html = `<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border);">
-                        <div style="background: #eef2ff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">🩺</div>
-                        <h4 style="margin:0 0 10px 0; color: var(--text-muted);">Tổng lượt khám</h4>
-                        <h2 style="margin:0; color: var(--primary); font-size: 36px;">${res.total}</h2>
-                    </div>`;
                     const khoms = [
-                        {id: 'thuận an', label: 'Thuận An', icon: '📍', color: '#fef3c7'},
-                        {id: 'thuận nghĩa', label: 'Thuận Nghĩa', icon: '📍', color: '#d1fae5'},
-                        {id: 'thuận phú', label: 'Thuận Phú', icon: '📍', color: '#e0e7ff'},
-                        {id: 'thuận trung', label: 'Thuận Trung', icon: '📍', color: '#ffedd5'},
-                        {id: 'thuận phát', label: 'Thuận Phát', icon: '📍', color: '#fce7f3'}
+                        {id: 'thuận an', label: 'Thuận An', icon: '🏠'},
+                        {id: 'thuận nghĩa', label: 'Thuận Nghĩa', icon: '🏠'},
+                        {id: 'thuận phú', label: 'Thuận Phú', icon: '🏠'},
+                        {id: 'thuận trung', label: 'Thuận Trung', icon: '🏠'},
+                        {id: 'thuận phát', label: 'Thuận Phát', icon: '🏠'}
                     ];
+                    
+                    let html = '';
                     khoms.forEach(k => {
-                        const count = res.stats[k.id] || 0;
-                        html += `<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border);">
-                            <div style="background: ${k.color}; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">${k.icon}</div>
-                            <h4 style="margin:0 0 10px 0; color: var(--text-muted);">${k.label}</h4>
-                            <h2 style="margin:0; color: var(--text-main); font-size: 28px;">${count}</h2>
-                        </div>`;
+                        const stat = res.stats[k.id] || {count: 0, gid: 0};
+                        const count = stat.count || 0;
+                        const gid = stat.gid || 0;
+                        
+                        html += `
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 15px; border-bottom: 1px solid var(--border);">${k.icon} ${k.label}</td>
+                            <td style="padding: 15px; border-bottom: 1px solid var(--border); text-align: center; font-weight: 600; color: var(--primary); border-left: 1px solid var(--border); border-right: 1px solid var(--border);">${count} hồ sơ</td>
+                            <td style="padding: 15px; border-bottom: 1px solid var(--border); text-align: center;">
+                                <a href="https://docs.google.com/spreadsheets/d/1n5rZELH6C0ktGRdEam2X25zymXTn8dQh/export?format=xlsx&gid=${gid}" target="_blank" style="display: inline-block; background: #0ea5e9; color: white; padding: 6px 15px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 500;">⇩ Tải DS</a>
+                            </td>
+                        </tr>
+                        `;
                     });
-                    container.innerHTML = html;
+                    
+                    // Thêm dòng Tổng Cộng
+                    html += `
+                    <tr style="background: #e0ffff;">
+                        <td style="padding: 15px; font-weight: 700; color: var(--text-main);">TỔNG CỘNG</td>
+                        <td style="padding: 15px; text-align: center; font-weight: 700; color: #dc2626; font-size: 16px; border-left: 1px solid var(--border); border-right: 1px solid var(--border);">${res.total} hồ sơ</td>
+                        <td style="padding: 15px; text-align: center;">
+                            <a href="https://docs.google.com/spreadsheets/d/1n5rZELH6C0ktGRdEam2X25zymXTn8dQh/export?format=xlsx" target="_blank" style="display: inline-block; background: #8b5cf6; color: white; padding: 6px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600;">📥 Tải TẤT CẢ</a>
+                        </td>
+                    </tr>
+                    `;
+                    
+                    tbody.innerHTML = html;
                 } else {
-                    container.innerHTML = `<p style="color:red">Lỗi: ${res.message || res.error}</p>`;
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi: ${res.message || res.error}</td></tr>`;
                 }
             } catch (err) {
-                container.innerHTML = `<p style="color:red">Lỗi kết nối Server</p>`;
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi kết nối Server</td></tr>`;
             }
         }
     </script>
