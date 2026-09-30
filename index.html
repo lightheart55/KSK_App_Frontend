@@ -391,7 +391,7 @@
     
         <div class="form-group">
             <label title="Cột 58 (Excel)">Kết luận về mắt</label>
-            <select id="f_58" class="form-control">
+            <select id="f_58" class="form-control" onchange="if(document.getElementById('f_87')) document.getElementById('f_87').value = this.value;">
                 <option value="">-- Chọn phân loại --</option>
                 <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
                 <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
@@ -428,7 +428,7 @@
     
         <div class="form-group">
             <label title="Cột 64 (Excel)">Kết luận về tai - mũi - họng</label>
-            <select id="f_64" class="form-control">
+            <select id="f_64" class="form-control" onchange="if(document.getElementById('f_88')) document.getElementById('f_88').value = this.value;">
                 <option value="">-- Chọn phân loại --</option>
                 <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
                 <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
@@ -455,7 +455,7 @@
     
         <div class="form-group">
             <label title="Cột 68 (Excel)">Kết luận về răng - hàm - mặt</label>
-            <select id="f_68" class="form-control">
+            <select id="f_68" class="form-control" onchange="if(document.getElementById('f_89')) document.getElementById('f_89').value = this.value;">
                 <option value="">-- Chọn phân loại --</option>
                 <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
                 <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
@@ -546,9 +546,16 @@
                     <h3 class="section-title">Kết luận</h3><div class="grid-2">
         <div class="form-group">
             <label title="Cột 84 (Excel)">Kết luận đánh giá tình trạng sức khoẻ</label>
-            <input type="text" id="f_84" class="form-control" placeholder="Nhập kết luận đánh giá tình trạng sức khoẻ" >
+            <select id="f_84" class="form-control" onchange="">
+                <option value="">-- Chọn phân loại --</option>
+                <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
+                <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
+                <option value="Loại III (Trung bình)">Loại III (Trung bình)</option>
+                <option value="Loại IV (Yếu)">Loại IV (Yếu)</option>
+                <option value="Loại V (Rất yếu)">Loại V (Rất yếu)</option>
+            </select>
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 85 (Excel)">Kết luận các vấn đề sức khoẻ cần lưu ý</label>
             <input type="text" id="f_85" class="form-control" placeholder="Nhập kết luận các vấn đề sức khoẻ cần lưu ý" >
@@ -561,19 +568,40 @@
     
         <div class="form-group">
             <label title="Cột 87 (Excel)">Kết luận về mắt</label>
-            <input type="text" id="f_87" class="form-control" placeholder="Nhập kết luận về mắt" >
+            <select id="f_87" class="form-control" onchange="if(document.getElementById('f_58')) document.getElementById('f_58').value = this.value;">
+                <option value="">-- Chọn phân loại --</option>
+                <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
+                <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
+                <option value="Loại III (Trung bình)">Loại III (Trung bình)</option>
+                <option value="Loại IV (Yếu)">Loại IV (Yếu)</option>
+                <option value="Loại V (Rất yếu)">Loại V (Rất yếu)</option>
+            </select>
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 88 (Excel)">Kết luận về tai - mũi - họng</label>
-            <input type="text" id="f_88" class="form-control" placeholder="Nhập kết luận về tai - mũi - họng" >
+            <select id="f_88" class="form-control" onchange="if(document.getElementById('f_64')) document.getElementById('f_64').value = this.value;">
+                <option value="">-- Chọn phân loại --</option>
+                <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
+                <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
+                <option value="Loại III (Trung bình)">Loại III (Trung bình)</option>
+                <option value="Loại IV (Yếu)">Loại IV (Yếu)</option>
+                <option value="Loại V (Rất yếu)">Loại V (Rất yếu)</option>
+            </select>
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 89 (Excel)">Kết luận về răng - hàm - mặt</label>
-            <input type="text" id="f_89" class="form-control" placeholder="Nhập kết luận về răng - hàm - mặt" >
+            <select id="f_89" class="form-control" onchange="if(document.getElementById('f_68')) document.getElementById('f_68').value = this.value;">
+                <option value="">-- Chọn phân loại --</option>
+                <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
+                <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
+                <option value="Loại III (Trung bình)">Loại III (Trung bình)</option>
+                <option value="Loại IV (Yếu)">Loại IV (Yếu)</option>
+                <option value="Loại V (Rất yếu)">Loại V (Rất yếu)</option>
+            </select>
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 90 (Excel)">Ghi chú</label>
             <input type="text" id="f_90" class="form-control" placeholder="Nhập ghi chú" >
