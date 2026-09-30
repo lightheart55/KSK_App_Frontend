@@ -795,7 +795,7 @@
         async function login() {
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
-            const msg = document.getElementById('msg');
+            const msg = document.getElementById('login-msg');
             
             if(!u || !p) { msg.innerText = "Vui lòng nhập đầy đủ"; return; }
             msg.innerText = "Đang đăng nhập...";
