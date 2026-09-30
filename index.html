@@ -73,6 +73,17 @@
                         <tr><td colspan="3" style="text-align:center; padding: 20px;">Đang tải dữ liệu...</td></tr>
                     </tbody>
                 </table>
+
+                <div style="margin-top: 20px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <div>
+                        <strong style="color: #166534;">📊 Sheet TỔNG 05</strong>
+                        <p style="margin: 4px 0 0; color: #15803d; font-size: 14px;">Trước khi tải Excel tổng hợp, cần đồng bộ dữ liệu từ 5 sheet khóm vào sheet TỔNG 05 trước.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-shrink: 0;">
+                        <button onclick="syncTong05()" id="btn-sync-tong" style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px;">🔄 Đồng bộ TỔNG 05</button>
+                        <a href="https://docs.google.com/spreadsheets/d/1CMpd1EYUCjcU4zEQFLvJNRuzfc1Ru2SOJ59XS6_00oI/export?format=xlsx" target="_blank" style="background: #8b5cf6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center;">📥 Tải Excel Tất Cả</a>
+                    </div>
+                </div>
             </div>
 
             <div id="tab-admin" class="panel">
@@ -1182,6 +1193,34 @@
             }
             
             btn.innerText = "Xóa Các Dòng Đã Chọn";
+            btn.disabled = false;
+        }
+
+        async function syncTong05() {
+            const btn = document.getElementById('btn-sync-tong');
+            btn.innerText = 'Đang đồng bộ... (có thể mất 30s)';
+            btn.disabled = true;
+            
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'syncTong05', token: token })
+                }).then(r => r.json());
+                
+                if (res.success) {
+                    alert('✅ ' + res.message + '
+Bây giờ bạn có thể bấm "Tải Excel Tất Cả" để tải file tổng hợp!');
+                    loadStats();
+                } else {
+                    alert('❌ Lỗi: ' + (res.message || res.error));
+                }
+            } catch (err) {
+                alert('❌ Lỗi kết nối Server: ' + err);
+            }
+            
+            btn.innerText = '🔄 Đồng bộ TỔNG 05';
             btn.disabled = false;
         }
 
