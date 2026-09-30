@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="theme.css">
 </head>
 <body>
-    <!-- Login Screen -->
     <div id="login-screen">
         <div class="login-card">
             <h2>Đăng Nhập Hệ Thống</h2>
@@ -25,7 +24,6 @@
         </div>
     </div>
 
-    <!-- Main App Screen -->
     <div id="app" style="display: none;">
         <header>
             <h1>🩺 Quản Lý Khám Sức Khỏe</h1>
@@ -38,12 +36,12 @@
 
         <div class="container">
             <div class="nav-tabs">
-                <button class="nav-tab active" onclick="switchTab('tab-hanhchinh')">Thông tin Hành chính</button>
-                <button class="nav-tab" onclick="switchTab('tab-tiensu')">Tiền sử bệnh tật</button>
-                <button class="nav-tab" onclick="switchTab('tab-theluc')">Khám thể lực</button>
-                <button class="nav-tab" onclick="switchTab('tab-lamsang')">Khám lâm sàng</button>
-                <button class="nav-tab" onclick="switchTab('tab-canlamsang')">Cận lâm sàng</button>
-                <button class="nav-tab" onclick="switchTab('tab-ketluan')">Kết luận</button>
+                <button type="button" class="nav-tab active" onclick="switchTab('tab-hanhchinh')">Thông tin Hành chính</button>
+                <button type="button" class="nav-tab" onclick="switchTab('tab-tiensu')">Tiền sử bệnh tật</button>
+                <button type="button" class="nav-tab" onclick="switchTab('tab-theluc')">Khám thể lực</button>
+                <button type="button" class="nav-tab" onclick="switchTab('tab-lamsang')">Khám lâm sàng</button>
+                <button type="button" class="nav-tab" onclick="switchTab('tab-canlamsang')">Cận lâm sàng</button>
+                <button type="button" class="nav-tab" onclick="switchTab('tab-ketluan')">Kết luận</button>
             </div>
 
             <form id="ksk-form" onsubmit="submitForm(event)">
@@ -65,107 +63,114 @@
         
         <div class="form-group">
             <label title="Cột 1 (Excel)">Họ và tên</label>
-            <input type="text" id="f_1" class="form-control" placeholder="Nhập họ và tên">
+            <input type="text" id="f_1" class="form-control" placeholder="Nhập họ và tên" >
         </div>
     
         <div class="form-group">
             <label title="Cột 2 (Excel)">Giới tính</label>
-            <input type="text" id="f_2" class="form-control" placeholder="Nhập giới tính">
+            <input type="text" id="f_2" class="form-control" placeholder="Nhập giới tính" >
         </div>
     
         <div class="form-group">
             <label title="Cột 3 (Excel)">Ngày sinh</label>
-            <input type="date" id="f_3" class="form-control" placeholder="Nhập ngày sinh">
+            <input type="date" id="f_3" class="form-control" placeholder="Nhập ngày sinh" >
         </div>
     
         <div class="form-group">
-            <label title="Cột 4 (Excel)">CMND / CCCD / HC / Định danh công dân</label>
-            <input type="text" id="f_4" class="form-control" placeholder="Nhập cmnd / cccd / hc / định danh công dân">
+            <label title="Cột 4 (Excel)">CMND / CCCD / HC / Định danh công dân <span class="required">*</span></label>
+            <input type="text" id="f_4" class="form-control" placeholder="12 số CCCD" maxlength="12"
+                oninput="this.value=this.value.replace(/[^0-9]/g,''); document.getElementById('cccdLenHint').style.color = this.value.length===12 ? '#16a34a' : '#dc2626';">
+            <span id="cccdLenHint" style="font-size:0.75rem; color:#6b7280;">Nhập đủ 12 số mới được lưu</span>
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 5 (Excel)">Ngày cấp</label>
-            <input type="date" id="f_5" class="form-control" placeholder="Nhập ngày cấp">
+            <input type="date" id="f_5" class="form-control" placeholder="Nhập ngày cấp" >
         </div>
     
         <div class="form-group">
             <label title="Cột 6 (Excel)">Nơi cấp</label>
-            <input type="text" id="f_6" class="form-control" placeholder="Nhập nơi cấp">
+            <div style="position: relative;">
+                <select id="f_6_select" class="form-control"
+                    onchange="document.getElementById('f_6').value = this.value"
+                    oninput="document.getElementById('f_6').value = this.value">
+                    <option value="Cục trưởng Cục Cảnh sát QLHC về TTXH">Cục trưởng Cục Cảnh sát QLHC về TTXH</option>
+                    <option value="Bộ Công an">Bộ Công an</option>
+                </select>
+                <input type="text" id="f_6" class="form-control"
+                    style="position: absolute; left: 1px; top: 1px; width: calc(100% - 35px); height: calc(100% - 2px); border: none; box-shadow: none; border-radius: 5px 0 0 5px; outline: none; background: #fff;"
+                    value="Cục trưởng Cục Cảnh sát QLHC về TTXH">
+            </div>
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 7 (Excel)">Chỗ ở hiện tại</label>
-            <input type="text" id="f_7" class="form-control" placeholder="Nhập chỗ ở hiện tại">
+            <input type="text" id="f_7" class="form-control" placeholder="Nhập chỗ ở hiện tại" >
         </div>
     
         <div class="form-group">
             <label title="Cột 8 (Excel)">Mã Tỉnh</label>
-            <input type="text" id="f_8" class="form-control" placeholder="Nhập mã tỉnh">
+            <input type="text" id="f_8" class="form-control" placeholder="Nhập mã tỉnh" value="82">
         </div>
     
         <div class="form-group">
             <label title="Cột 9 (Excel)">Mã Xã</label>
-            <input type="text" id="f_9" class="form-control" placeholder="Nhập mã xã">
+            <input type="text" id="f_9" class="form-control" placeholder="Nhập mã xã" value="29869">
         </div>
     
         <div class="form-group">
             <label title="Cột 10 (Excel)">Mã nghề nghiệp</label>
-            <input type="text" id="f_10" class="form-control" placeholder="Nhập mã nghề nghiệp">
+            <input type="text" id="f_10" class="form-control" placeholder="Nhập mã nghề nghiệp" >
         </div>
     
         <div class="form-group">
             <label title="Cột 11 (Excel)">Nơi công tác/học tập hiện tại</label>
-            <input type="text" id="f_11" class="form-control" placeholder="Nhập nơi công tác/học tập hiện tại">
+            <input type="text" id="f_11" class="form-control" placeholder="Nhập nơi công tác/học tập hiện tại" >
         </div>
     
         <div class="form-group">
             <label title="Cột 12 (Excel)">Thời gian bắt đầu làm việc nơi hiện tại</label>
-            <input type="date" id="f_12" class="form-control" placeholder="Nhập thời gian bắt đầu làm việc nơi hiện tại">
+            <input type="date" id="f_12" class="form-control" placeholder="Nhập thời gian bắt đầu làm việc nơi hiện tại" >
         </div>
     
         <div class="form-group">
             <label title="Cột 13 (Excel)">Nghề, công việc trước đây</label>
-            <input type="text" id="f_13" class="form-control" placeholder="Nhập nghề, công việc trước đây">
+            <input type="text" id="f_13" class="form-control" placeholder="Nhập nghề, công việc trước đây" >
         </div>
     
         <div class="form-group">
             <label title="Cột 14 (Excel)">Thời gian bắt đầu làm việc trước đó</label>
-            <input type="date" id="f_14" class="form-control" placeholder="Nhập thời gian bắt đầu làm việc trước đó">
+            <input type="date" id="f_14" class="form-control" placeholder="Nhập thời gian bắt đầu làm việc trước đó" >
         </div>
     
         <div class="form-group">
             <label title="Cột 15 (Excel)">Thời gian kết thúc làm việc trước đó</label>
-            <input type="date" id="f_15" class="form-control" placeholder="Nhập thời gian kết thúc làm việc trước đó">
+            <input type="date" id="f_15" class="form-control" placeholder="Nhập thời gian kết thúc làm việc trước đó" >
         </div>
     
         <div class="form-group">
             <label title="Cột 16 (Excel)">Điện thoại</label>
-            <input type="text" id="f_16" class="form-control" placeholder="Nhập điện thoại">
+            <input type="text" id="f_16" class="form-control" placeholder="09xxxx" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
         </div>
-    
-        <div class="form-group">
-            <label title="Cột 17 (Excel)">Chữ ký số người khám</label>
-            <input type="text" id="f_17" class="form-control" placeholder="Nhập chữ ký số người khám">
-        </div>
-    
+        
         <div class="form-group">
             <label title="Cột 18 (Excel)">Lượt khám</label>
-            <input type="text" id="f_18" class="form-control" placeholder="Nhập lượt khám">
+            <input type="text" id="f_18" class="form-control" placeholder="Nhập lượt khám" >
         </div>
     
         <div class="form-group">
             <label title="Cột 19 (Excel)">Mã cơ sở khám bệnh, chữa bệnh</label>
-            <input type="text" id="f_19" class="form-control" placeholder="Nhập mã cơ sở khám bệnh, chữa bệnh">
+            <input type="text" id="f_19" class="form-control" placeholder="Nhập mã cơ sở khám bệnh, chữa bệnh" value="87161">
         </div>
     
         <div class="form-group">
             <label title="Cột 20 (Excel)">Mã cơ sở khám bệnh, chữa bệnh theo chuẩn GLN</label>
-            <input type="text" id="f_20" class="form-control" placeholder="Nhập mã cơ sở khám bệnh, chữa bệnh theo chuẩn gln">
+            <input type="text" id="f_20" class="form-control" placeholder="Nhập mã cơ sở khám bệnh, chữa bệnh theo chuẩn gln" value="8934286045498">
         </div>
     
         <div class="form-group">
             <label title="Cột 21 (Excel)">Ngày khám sức khỏe</label>
-            <input type="date" id="f_21" class="form-control" placeholder="Nhập ngày khám sức khỏe">
+            <input type="date" id="f_21" class="form-control" placeholder="Nhập ngày khám sức khỏe" >
         </div>
     
     </div>
@@ -174,9 +179,7 @@
     <h3 class="section-title">Tiền sử bệnh tật</h3>
     <div class="sub-title">Tiền sử chi tiết:</div>
     <div class="table-container">
-        <table class="ts-table">
-            <thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị / Lựa chọn</th></tr></thead>
-            <tbody>
+        <table class="ts-table"><thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị</th></tr></thead><tbody>
         <tr>
             <td>1</td>
             <td><label title="Cột 22">Có ai trong gia đình mắc bệnh không</label></td>
@@ -224,11 +227,8 @@
             <td><label title="Cột 29">Tính chất  kinh nguyệt</label></td>
             <td><input type="text" id="f_29" class="form-control" placeholder="..."></td>
         </tr>
-    </tbody>
-        </table>
-        <table class="ts-table">
-            <thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị / Lựa chọn</th></tr></thead>
-            <tbody>
+    </tbody></table>
+        <table class="ts-table"><thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị</th></tr></thead><tbody>
         <tr>
             <td>9</td>
             <td><label title="Cột 30">Chu kỳ kinh (ngày)</label></td>
@@ -276,301 +276,280 @@
             <td><label title="Cột 37">Tên BPTT đang  sử dụng</label></td>
             <td><input type="text" id="f_37" class="form-control" placeholder="..."></td>
         </tr>
-    </tbody>
-        </table>
+    </tbody></table>
     </div>
 </div>
-                <div id="tab-theluc" class="panel">
-    <h3 class="section-title">Khám thể lực</h3>
-    <div class="grid-5">
-        
+                <div id="tab-theluc" class="panel"><h3 class="section-title">Khám thể lực</h3><div class="grid-5">
         <div class="form-group">
             <label title="Cột 38 (Excel)">Chiều cao (cm)</label>
-            <input type="text" id="f_38" class="form-control" placeholder="Nhập chiều cao (cm)">
+            <input type="text" id="f_38" class="form-control" placeholder="Nhập chiều cao (cm)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 39 (Excel)">Cân nặng (kg)</label>
-            <input type="text" id="f_39" class="form-control" placeholder="Nhập cân nặng (kg)">
+            <input type="text" id="f_39" class="form-control" placeholder="Nhập cân nặng (kg)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 40 (Excel)">Chỉ số BMI</label>
-            <input type="text" id="f_40" class="form-control" placeholder="Nhập chỉ số bmi">
+            <input type="text" id="f_40" class="form-control" placeholder="Nhập chỉ số bmi" >
         </div>
     
         <div class="form-group">
             <label title="Cột 41 (Excel)">Mạch (lần/phút)</label>
-            <input type="text" id="f_41" class="form-control" placeholder="Nhập mạch (lần/phút)">
+            <input type="text" id="f_41" class="form-control" placeholder="Nhập mạch (lần/phút)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 42 (Excel)">Huyết áp</label>
-            <input type="text" id="f_42" class="form-control" placeholder="Nhập huyết áp">
+            <input type="text" id="f_42" class="form-control" placeholder="Nhập huyết áp" >
         </div>
-    
-    </div>
-</div>
-                <div id="tab-lamsang" class="panel">
-    <h3 class="section-title">Khám lâm sàng</h3>
-    <div class="grid-3">
-        
+    </div></div>
+                <div id="tab-lamsang" class="panel"><h3 class="section-title">Khám lâm sàng</h3><div class="grid-3">
         <div class="form-group">
             <label title="Cột 43 (Excel)">Tuần hoàn</label>
-            <input type="text" id="f_43" class="form-control" placeholder="Nhập tuần hoàn">
+            <input type="text" id="f_43" class="form-control" placeholder="Nhập tuần hoàn" value="tim đều rỏ">
         </div>
     
         <div class="form-group">
             <label title="Cột 44 (Excel)">Hô hấp</label>
-            <input type="text" id="f_44" class="form-control" placeholder="Nhập hô hấp">
+            <input type="text" id="f_44" class="form-control" placeholder="Nhập hô hấp" value="phổi trong">
         </div>
     
         <div class="form-group">
             <label title="Cột 45 (Excel)">Tiêu hóa</label>
-            <input type="text" id="f_45" class="form-control" placeholder="Nhập tiêu hóa">
+            <input type="text" id="f_45" class="form-control" placeholder="Nhập tiêu hóa" value="bụng mềm">
         </div>
     
         <div class="form-group">
             <label title="Cột 46 (Excel)">Thận-Tiết niệu</label>
-            <input type="text" id="f_46" class="form-control" placeholder="Nhập thận-tiết niệu">
+            <input type="text" id="f_46" class="form-control" placeholder="Nhập thận-tiết niệu" value="chạm thận (-)">
         </div>
     
         <div class="form-group">
             <label title="Cột 47 (Excel)">khớp</label>
-            <input type="text" id="f_47" class="form-control" placeholder="Nhập khớp">
+            <input type="text" id="f_47" class="form-control" placeholder="Nhập khớp" value="chưa ghi nhận bất thường">
         </div>
     
         <div class="form-group">
             <label title="Cột 48 (Excel)">Thần kinh</label>
-            <input type="text" id="f_48" class="form-control" placeholder="Nhập thần kinh">
+            <input type="text" id="f_48" class="form-control" placeholder="Nhập thần kinh" value="không dấu thần kinh khu trú">
         </div>
     
         <div class="form-group">
             <label title="Cột 49 (Excel)">Tâm thần</label>
-            <input type="text" id="f_49" class="form-control" placeholder="Nhập tâm thần">
+            <input type="text" id="f_49" class="form-control" placeholder="Nhập tâm thần" value="tiếp xúc tốt">
         </div>
     
         <div class="form-group">
             <label title="Cột 50 (Excel)">Kết quả khám ngoại khoa</label>
-            <input type="text" id="f_50" class="form-control" placeholder="Nhập kết quả khám ngoại khoa">
+            <input type="text" id="f_50" class="form-control" placeholder="Nhập kết quả khám ngoại khoa" value="chưa ghi nhận bất thường">
         </div>
     
         <div class="form-group">
             <label title="Cột 51 (Excel)">Kết quả khám da liễu</label>
-            <input type="text" id="f_51" class="form-control" placeholder="Nhập kết quả khám da liễu">
+            <input type="text" id="f_51" class="form-control" placeholder="Nhập kết quả khám da liễu" value="chưa ghi nhận bất thường">
         </div>
     
         <div class="form-group">
             <label title="Cột 52 (Excel)">Kết quả khám sản phụ khoa</label>
-            <input type="text" id="f_52" class="form-control" placeholder="Nhập kết quả khám sản phụ khoa">
+            <input type="text" id="f_52" class="form-control" placeholder="Nhập kết quả khám sản phụ khoa" value="chưa ghi nhận bất thường">
         </div>
     
         <div class="form-group">
             <label title="Cột 53 (Excel)">Kết quả khám thị lực nhìn xa từng mắt khi không kính (mắt phải)</label>
-            <input type="text" id="f_53" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi không kính (mắt phải)">
+            <input type="text" id="f_53" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi không kính (mắt phải)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 54 (Excel)">Kết quả khám thị lực nhìn xa từng mắt khi không kính (mắt trái)</label>
-            <input type="text" id="f_54" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi không kính (mắt trái)">
+            <input type="text" id="f_54" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi không kính (mắt trái)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 55 (Excel)">Kết quả khám thị lực nhìn xa từng mắt khi có kính (mắt phải)</label>
-            <input type="text" id="f_55" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi có kính (mắt phải)">
+            <input type="text" id="f_55" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi có kính (mắt phải)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 56 (Excel)">Kết quả khám thị lực nhìn xa từng mắt khi có kính (mắt trái)</label>
-            <input type="text" id="f_56" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi có kính (mắt trái)">
+            <input type="text" id="f_56" class="form-control" placeholder="Nhập kết quả khám thị lực nhìn xa từng mắt khi có kính (mắt trái)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 57 (Excel)">Các bệnh về mắt (nếu có)</label>
-            <input type="text" id="f_57" class="form-control" placeholder="Nhập các bệnh về mắt (nếu có)">
+            <input type="text" id="f_57" class="form-control" placeholder="Nhập các bệnh về mắt (nếu có)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 58 (Excel)">Kết luận về mắt</label>
-            <input type="text" id="f_58" class="form-control" placeholder="Nhập kết luận về mắt">
+            <input type="text" id="f_58" class="form-control" placeholder="Nhập kết luận về mắt" >
         </div>
     
         <div class="form-group">
             <label title="Cột 59 (Excel)">Kết quả khám thính lực tai trái (nói thường)</label>
-            <input type="text" id="f_59" class="form-control" placeholder="Nhập kết quả khám thính lực tai trái (nói thường)">
+            <input type="text" id="f_59" class="form-control" placeholder="Nhập kết quả khám thính lực tai trái (nói thường)" value="5m">
         </div>
     
         <div class="form-group">
             <label title="Cột 60 (Excel)">Kết quả khám thính lực tai trái (nói thầm)</label>
-            <input type="text" id="f_60" class="form-control" placeholder="Nhập kết quả khám thính lực tai trái (nói thầm)">
+            <input type="text" id="f_60" class="form-control" placeholder="Nhập kết quả khám thính lực tai trái (nói thầm)" value="0,5">
         </div>
     
         <div class="form-group">
             <label title="Cột 61 (Excel)">Kết quả khám thính lực tai phải (nói thường)</label>
-            <input type="text" id="f_61" class="form-control" placeholder="Nhập kết quả khám thính lực tai phải (nói thường)">
+            <input type="text" id="f_61" class="form-control" placeholder="Nhập kết quả khám thính lực tai phải (nói thường)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 62 (Excel)">Kết quả khám thính lực tai phải (nói thầm)</label>
-            <input type="text" id="f_62" class="form-control" placeholder="Nhập kết quả khám thính lực tai phải (nói thầm)">
+            <input type="text" id="f_62" class="form-control" placeholder="Nhập kết quả khám thính lực tai phải (nói thầm)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 63 (Excel)">Các bệnh về tai mũi họng (nếu có)</label>
-            <input type="text" id="f_63" class="form-control" placeholder="Nhập các bệnh về tai mũi họng (nếu có)">
+            <input type="text" id="f_63" class="form-control" placeholder="Nhập các bệnh về tai mũi họng (nếu có)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 64 (Excel)">họng</label>
-            <input type="text" id="f_64" class="form-control" placeholder="Nhập họng">
+            <input type="text" id="f_64" class="form-control" placeholder="Nhập họng" >
         </div>
     
         <div class="form-group">
             <label title="Cột 65 (Excel)">Kết quả khám hàm trên</label>
-            <input type="text" id="f_65" class="form-control" placeholder="Nhập kết quả khám hàm trên">
+            <input type="text" id="f_65" class="form-control" placeholder="Nhập kết quả khám hàm trên" >
         </div>
     
         <div class="form-group">
             <label title="Cột 66 (Excel)">Kết quả khám hàm dưới</label>
-            <input type="text" id="f_66" class="form-control" placeholder="Nhập kết quả khám hàm dưới">
+            <input type="text" id="f_66" class="form-control" placeholder="Nhập kết quả khám hàm dưới" >
         </div>
     
         <div class="form-group">
             <label title="Cột 67 (Excel)">Các bệnh về răng-hàm-mặt (nếu có)</label>
-            <input type="text" id="f_67" class="form-control" placeholder="Nhập các bệnh về răng-hàm-mặt (nếu có)">
+            <input type="text" id="f_67" class="form-control" placeholder="Nhập các bệnh về răng-hàm-mặt (nếu có)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 68 (Excel)">mặt</label>
-            <input type="text" id="f_68" class="form-control" placeholder="Nhập mặt">
+            <input type="text" id="f_68" class="form-control" placeholder="Nhập mặt" >
         </div>
-    
-    </div>
-</div>
-                <div id="tab-canlamsang" class="panel">
-    <h3 class="section-title">Cận lâm sàng</h3>
-    <div class="grid-4">
-        
+    </div></div>
+                <div id="tab-canlamsang" class="panel"><h3 class="section-title">Cận lâm sàng</h3><div class="grid-4">
         <div class="form-group">
             <label title="Cột 69 (Excel)">Chỉ số hồng cầu</label>
-            <input type="text" id="f_69" class="form-control" placeholder="Nhập chỉ số hồng cầu">
+            <input type="text" id="f_69" class="form-control" placeholder="Nhập chỉ số hồng cầu" >
         </div>
     
         <div class="form-group">
             <label title="Cột 70 (Excel)">Chỉ số bạch cầu</label>
-            <input type="text" id="f_70" class="form-control" placeholder="Nhập chỉ số bạch cầu">
+            <input type="text" id="f_70" class="form-control" placeholder="Nhập chỉ số bạch cầu" >
         </div>
     
         <div class="form-group">
             <label title="Cột 71 (Excel)">Chỉ số tiểu cầu</label>
-            <input type="text" id="f_71" class="form-control" placeholder="Nhập chỉ số tiểu cầu">
+            <input type="text" id="f_71" class="form-control" placeholder="Nhập chỉ số tiểu cầu" >
         </div>
     
         <div class="form-group">
             <label title="Cột 72 (Excel)">Đường máu</label>
-            <input type="text" id="f_72" class="form-control" placeholder="Nhập đường máu">
+            <input type="text" id="f_72" class="form-control" placeholder="Nhập đường máu" >
         </div>
     
         <div class="form-group">
             <label title="Cột 73 (Excel)">Urê</label>
-            <input type="text" id="f_73" class="form-control" placeholder="Nhập urê">
+            <input type="text" id="f_73" class="form-control" placeholder="Nhập urê" >
         </div>
     
         <div class="form-group">
             <label title="Cột 74 (Excel)">Creatinin</label>
-            <input type="text" id="f_74" class="form-control" placeholder="Nhập creatinin">
+            <input type="text" id="f_74" class="form-control" placeholder="Nhập creatinin" >
         </div>
     
         <div class="form-group">
             <label title="Cột 75 (Excel)">ASAT(GOT)</label>
-            <input type="text" id="f_75" class="form-control" placeholder="Nhập asat(got)">
+            <input type="text" id="f_75" class="form-control" placeholder="Nhập asat(got)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 76 (Excel)">ALAT (GPT)</label>
-            <input type="text" id="f_76" class="form-control" placeholder="Nhập alat (gpt)">
+            <input type="text" id="f_76" class="form-control" placeholder="Nhập alat (gpt)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 77 (Excel)">Chỉ số Đường</label>
-            <input type="text" id="f_77" class="form-control" placeholder="Nhập chỉ số đường">
+            <input type="text" id="f_77" class="form-control" placeholder="Nhập chỉ số đường" >
         </div>
     
         <div class="form-group">
             <label title="Cột 78 (Excel)">Chỉ số Protein</label>
-            <input type="text" id="f_78" class="form-control" placeholder="Nhập chỉ số protein">
+            <input type="text" id="f_78" class="form-control" placeholder="Nhập chỉ số protein" >
         </div>
     
         <div class="form-group">
             <label title="Cột 79 (Excel)">Chỉ số Khác (nếu có)</label>
-            <input type="text" id="f_79" class="form-control" placeholder="Nhập chỉ số khác (nếu có)">
+            <input type="text" id="f_79" class="form-control" placeholder="Nhập chỉ số khác (nếu có)" >
         </div>
     
         <div class="form-group">
             <label title="Cột 80 (Excel)">Kết quả chẩn đoán hình ảnh</label>
-            <input type="text" id="f_80" class="form-control" placeholder="Nhập kết quả chẩn đoán hình ảnh">
+            <input type="text" id="f_80" class="form-control" placeholder="Nhập kết quả chẩn đoán hình ảnh" >
         </div>
     
         <div class="form-group">
             <label title="Cột 81 (Excel)">Kết quả điện tim</label>
-            <input type="text" id="f_81" class="form-control" placeholder="Nhập kết quả điện tim">
+            <input type="text" id="f_81" class="form-control" placeholder="Nhập kết quả điện tim" >
         </div>
     
         <div class="form-group">
             <label title="Cột 82 (Excel)">Tên xét nghiệm khác</label>
-            <input type="text" id="f_82" class="form-control" placeholder="Nhập tên xét nghiệm khác">
+            <input type="text" id="f_82" class="form-control" placeholder="Nhập tên xét nghiệm khác" >
         </div>
     
         <div class="form-group">
             <label title="Cột 83 (Excel)">Kết quả xét nghiệm khác</label>
-            <input type="text" id="f_83" class="form-control" placeholder="Nhập kết quả xét nghiệm khác">
+            <input type="text" id="f_83" class="form-control" placeholder="Nhập kết quả xét nghiệm khác" >
         </div>
-    
-    </div>
-</div>
+    </div></div>
                 
                 <div id="tab-ketluan" class="panel">
-                    
-    <h3 class="section-title">Kết luận</h3>
-    <div class="grid-2">
-        
+                    <h3 class="section-title">Kết luận</h3><div class="grid-2">
         <div class="form-group">
             <label title="Cột 84 (Excel)">Kết luận đánh giá tình trạng sức khoẻ</label>
-            <input type="text" id="f_84" class="form-control" placeholder="Nhập kết luận đánh giá tình trạng sức khoẻ">
+            <input type="text" id="f_84" class="form-control" placeholder="Nhập kết luận đánh giá tình trạng sức khoẻ" >
         </div>
     
         <div class="form-group">
             <label title="Cột 85 (Excel)">Kết luận các vấn đề sức khoẻ cần lưu ý</label>
-            <input type="text" id="f_85" class="form-control" placeholder="Nhập kết luận các vấn đề sức khoẻ cần lưu ý">
+            <input type="text" id="f_85" class="form-control" placeholder="Nhập kết luận các vấn đề sức khoẻ cần lưu ý" >
         </div>
     
         <div class="form-group">
             <label title="Cột 86 (Excel)">Chữ ký số người kết luận</label>
-            <input type="text" id="f_86" class="form-control" placeholder="Nhập chữ ký số người kết luận">
+            <input type="text" id="f_86" class="form-control" placeholder="Nhập chữ ký số người kết luận" >
         </div>
     
         <div class="form-group">
             <label title="Cột 87 (Excel)">Kết luận về mắt</label>
-            <input type="text" id="f_87" class="form-control" placeholder="Nhập kết luận về mắt">
+            <input type="text" id="f_87" class="form-control" placeholder="Nhập kết luận về mắt" >
         </div>
     
         <div class="form-group">
             <label title="Cột 88 (Excel)">họng</label>
-            <input type="text" id="f_88" class="form-control" placeholder="Nhập họng">
+            <input type="text" id="f_88" class="form-control" placeholder="Nhập họng" >
         </div>
     
         <div class="form-group">
             <label title="Cột 89 (Excel)">mặt</label>
-            <input type="text" id="f_89" class="form-control" placeholder="Nhập mặt">
+            <input type="text" id="f_89" class="form-control" placeholder="Nhập mặt" >
         </div>
     
         <div class="form-group">
             <label title="Cột 90 (Excel)">Ghi chú</label>
-            <input type="text" id="f_90" class="form-control" placeholder="Nhập ghi chú">
+            <input type="text" id="f_90" class="form-control" placeholder="Nhập ghi chú" >
         </div>
-    
     </div>
-
                     
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; align-items: center; gap: 20px;">
                         <span id="submit-msg" style="font-weight: 500; font-size: 15px;"></span>
@@ -642,6 +621,15 @@
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
             const msg = document.getElementById('submit-msg');
+            
+            // Validate CCCD length
+            const cccd = document.getElementById("f_4");
+            if (cccd && cccd.value.length !== 12) {
+                msg.style.color = "var(--danger)";
+                msg.innerText = "⚠️ Căn cước công dân phải đủ 12 số!";
+                switchTab('tab-hanhchinh');
+                return;
+            }
             
             btn.disabled = true;
             btn.innerText = "Đang lưu...";

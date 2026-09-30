@@ -29,7 +29,6 @@ header h1 { margin: 0; font-size: 18px; color: var(--primary); }
 
 .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
 
-/* Tabs Navigation */
 .nav-tabs {
     display: flex;
     gap: 2px;
@@ -50,12 +49,8 @@ header h1 { margin: 0; font-size: 18px; color: var(--primary); }
     white-space: nowrap;
 }
 .nav-tab:hover { background: var(--primary-light); color: var(--primary); }
-.nav-tab.active {
-    background: var(--primary);
-    color: white;
-}
+.nav-tab.active { background: var(--primary); color: white; }
 
-/* Form Sections */
 .panel {
     display: none;
     background: var(--bg-card);
@@ -75,30 +70,14 @@ header h1 { margin: 0; font-size: 18px; color: var(--primary); }
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
 }
-.sub-title {
-    color: var(--primary);
-    font-size: 14px;
-    font-weight: 600;
-    margin: 20px 0 10px 0;
-}
+.sub-title { color: var(--primary); font-size: 14px; font-weight: 600; margin: 20px 0 10px 0; }
 
-/* Grid Layouts */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; }
 .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
 
-/* Form Controls */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-.form-group.row {
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-}
+.form-group { display: flex; flex-direction: column; gap: 6px; }
 label { font-weight: 500; font-size: 13px; color: var(--text-main); }
 .required { color: var(--danger); }
 
@@ -116,18 +95,12 @@ label { font-weight: 500; font-size: 13px; color: var(--text-main); }
     box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-/* Radio & Checkbox */
-.radio-group { display: flex; gap: 15px; }
-.radio-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
-
-/* Table for Tiền sử */
 .table-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 15px; }
 .ts-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .ts-table th, .ts-table td { padding: 10px; border-bottom: 1px solid var(--border); text-align: left; }
 .ts-table th { color: var(--text-muted); font-weight: 500; }
 .ts-table tr:hover { background: var(--primary-light); }
 
-/* Buttons */
 .btn {
     padding: 10px 20px;
     border: none;
@@ -144,19 +117,6 @@ label { font-weight: 500; font-size: 13px; color: var(--text-main); }
 .btn-danger { background: var(--danger); }
 .btn-danger:hover { background: #dc2626; }
 
-/* Login Screen */
-#login-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-.login-card {
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
-}
+#login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
 .login-card h2 { text-align: center; color: var(--primary); margin-top: 0; }
