@@ -42,6 +42,7 @@
                 <button type="button" class="nav-tab" onclick="switchTab('tab-lamsang')">Khám lâm sàng</button>
                 <button type="button" class="nav-tab" onclick="switchTab('tab-canlamsang')">Cận lâm sàng</button>
                 <button type="button" class="nav-tab" onclick="switchTab('tab-ketluan')">Kết luận</button>
+                <button type="button" class="nav-tab" onclick="switchTab('tab-thongke')" style="background: var(--primary-light); color: var(--primary);">📊 Thống kê</button>
             </div>
 
             <form id="ksk-form" onsubmit="submitForm(event)">
@@ -595,6 +596,13 @@
                     </div>
                 </div>
             </form>
+            
+            <div id="tab-thongke" class="panel">
+                <h3 class="section-title">Thống kê lượt khám theo Khóm</h3>
+                <div class="grid-3" id="stats-container">
+                    <p style="color: var(--text-muted);">Đang tải dữ liệu...</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -615,6 +623,10 @@
             document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
+            
+            if (tabId === 'tab-thongke') {
+                loadStats();
+            }
         }
 
         async function login() {
@@ -731,6 +743,48 @@
                 document.getElementById('f_40').value = bmi.toFixed(1);
             } else {
                 document.getElementById('f_40').value = '';
+            }
+        }
+
+        async function loadStats() {
+            const token = localStorage.getItem('token');
+            if(!token) return;
+            const container = document.getElementById('stats-container');
+            container.innerHTML = '<p style="color: var(--text-muted);">Đang tải dữ liệu từ Google Sheet...</p>';
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'getStats', token: token })
+                }).then(r => r.json());
+                
+                if(res.success) {
+                    let html = `<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border);">
+                        <div style="background: #eef2ff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">🩺</div>
+                        <h4 style="margin:0 0 10px 0; color: var(--text-muted);">Tổng lượt khám</h4>
+                        <h2 style="margin:0; color: var(--primary); font-size: 36px;">${res.total}</h2>
+                    </div>`;
+                    const khoms = [
+                        {id: 'thuận an', label: 'Thuận An', icon: '📍', color: '#fef3c7'},
+                        {id: 'thuận nghĩa', label: 'Thuận Nghĩa', icon: '📍', color: '#d1fae5'},
+                        {id: 'thuận phú', label: 'Thuận Phú', icon: '📍', color: '#e0e7ff'},
+                        {id: 'thuận trung', label: 'Thuận Trung', icon: '📍', color: '#ffedd5'},
+                        {id: 'thuận phát', label: 'Thuận Phát', icon: '📍', color: '#fce7f3'}
+                    ];
+                    khoms.forEach(k => {
+                        const count = res.stats[k.id] || 0;
+                        html += `<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border);">
+                            <div style="background: ${k.color}; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">${k.icon}</div>
+                            <h4 style="margin:0 0 10px 0; color: var(--text-muted);">${k.label}</h4>
+                            <h2 style="margin:0; color: var(--text-main); font-size: 28px;">${count}</h2>
+                        </div>`;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `<p style="color:red">Lỗi: ${res.message || res.error}</p>`;
+                }
+            } catch (err) {
+                container.innerHTML = `<p style="color:red">Lỗi kết nối Server</p>`;
             }
         }
     </script>
