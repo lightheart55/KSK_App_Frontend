@@ -36,17 +36,20 @@
 
         <div class="container">
             <div class="nav-tabs">
-                <button type="button" class="nav-tab active" onclick="switchTab('tab-hanhchinh')">Thông tin Hành chính</button>
-                <button type="button" class="nav-tab" onclick="switchTab('tab-tiensu')">Tiền sử bệnh tật</button>
-                <button type="button" class="nav-tab" onclick="switchTab('tab-theluc')">Khám thể lực</button>
-                <button type="button" class="nav-tab" onclick="switchTab('tab-lamsang')">Khám lâm sàng</button>
-                <button type="button" class="nav-tab" onclick="switchTab('tab-canlamsang')">Cận lâm sàng</button>
-                <button type="button" class="nav-tab" onclick="switchTab('tab-ketluan')">Kết luận</button>
-                <button type="button" class="nav-tab" onclick="switchTab('tab-thongke')" style="background: var(--primary-light); color: var(--primary);">📊 Thống kê</button>
+                <button type="button" class="nav-tab active" onclick="switchTab('tab-thongke')" style="background: var(--primary-light); color: var(--primary);">📊 Thống kê</button>
+                <button type="button" class="nav-tab" onclick="switchTab('tab-form')">📝 Thêm phiếu khám sức khỏe</button>
+            </div>
+
+            <div id="tab-thongke" class="panel active">
+                <h3 class="section-title">Thống kê lượt khám theo Khóm</h3>
+                <div class="grid-3" id="stats-container">
+                    <p style="color: var(--text-muted);">Đang tải dữ liệu...</p>
+                </div>
             </div>
 
             <form id="ksk-form" onsubmit="submitForm(event)">
-                <div id="tab-hanhchinh" class="panel active">
+                <div id="tab-form" class="panel">
+                    <div class="form-section">
     <h3 class="section-title">Thông tin Hành chính</h3>
     <div class="grid-4" style="margin-bottom: 20px;">
         <div class="form-group">
@@ -180,7 +183,9 @@
     
     </div>
 </div>
-                <div id="tab-tiensu" class="panel"><h3 class="section-title">Tiền sử bệnh tật</h3><h4 class="sub-title" style="margin-top: 10px;">A. Tiền sử gia đình</h4><div class="grid-4">
+                    <hr style="border:none; border-top: 2px dashed var(--primary); opacity: 0.3; margin: 30px 0;">
+                    
+                    <div class="form-section"><h3 class="section-title">Tiền sử bệnh tật</h3><h4 class="sub-title" style="margin-top: 10px;">A. Tiền sử gia đình</h4><div class="grid-4">
         <div class="form-group">
             <label title="Cột 22 (Excel)">Có ai trong gia đình mắc bệnh không</label>
             <input type="text" id="f_22" class="form-control" placeholder="Nhập có ai trong gia đình mắc bệnh không" >
@@ -261,7 +266,9 @@
             <input type="text" id="f_37" class="form-control" placeholder="Nhập tên bptt đang  sử dụng" >
         </div>
     </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"></div>
-                <div id="tab-theluc" class="panel"><h3 class="section-title">Khám thể lực</h3><div class="grid-5">
+                    <hr style="border:none; border-top: 2px dashed var(--primary); opacity: 0.3; margin: 30px 0;">
+                    
+                    <div class="form-section"><h3 class="section-title">Khám thể lực</h3><div class="grid-5">
         <div class="form-group">
             <label title="Cột 38 (Excel)">Chiều cao (cm)</label>
             <input type="number" id="f_38" class="form-control" placeholder="Nhập chiều cao (cm)" oninput="calcBMI()">
@@ -287,7 +294,9 @@
             <input type="text" id="f_42" class="form-control" placeholder="Nhập huyết áp" >
         </div>
     </div></div>
-                <div id="tab-lamsang" class="panel"><h3 class="section-title">Khám lâm sàng</h3><h4 class="sub-title" style="margin-top: 10px;">A. Nội khoa</h4><div class="grid-3">
+                    <hr style="border:none; border-top: 2px dashed var(--primary); opacity: 0.3; margin: 30px 0;">
+                    
+                    <div class="form-section"><h3 class="section-title">Khám lâm sàng</h3><h4 class="sub-title" style="margin-top: 10px;">A. Nội khoa</h4><div class="grid-3">
         <div class="form-group">
             <label title="Cột 43 (Excel)">Tuần hoàn</label>
             <input type="text" id="f_43" class="form-control" placeholder="Nhập tuần hoàn" value="T1,T2 đều">
@@ -447,7 +456,9 @@
             </select>
         </div>
         </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"></div>
-                <div id="tab-canlamsang" class="panel"><h3 class="section-title">Cận lâm sàng</h3><div class="grid-4">
+                    <hr style="border:none; border-top: 2px dashed var(--primary); opacity: 0.3; margin: 30px 0;">
+                    
+                    <div class="form-section"><h3 class="section-title">Cận lâm sàng</h3><div class="grid-4">
         <div class="form-group">
             <label title="Cột 69 (Excel)">Chỉ số hồng cầu</label>
             <input type="text" id="f_69" class="form-control" placeholder="Nhập chỉ số hồng cầu" >
@@ -523,9 +534,10 @@
             <input type="text" id="f_83" class="form-control" placeholder="Nhập kết quả xét nghiệm khác" >
         </div>
     </div></div>
-                
-                <div id="tab-ketluan" class="panel">
-                    <h3 class="section-title">Kết luận</h3><div class="grid-2">
+                    <hr style="border:none; border-top: 2px dashed var(--primary); opacity: 0.3; margin: 30px 0;">
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">Kết luận</h3><div class="grid-2">
         <div class="form-group">
             <label title="Cột 84 (Excel)">Kết luận đánh giá tình trạng sức khoẻ</label>
             <select id="f_84" class="form-control" onchange="">
@@ -589,20 +601,13 @@
             <input type="text" id="f_90" class="form-control" placeholder="Nhập ghi chú" >
         </div>
     </div>
-                    
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; align-items: center; gap: 20px;">
-                        <span id="submit-msg" style="font-weight: 500; font-size: 15px;"></span>
-                        <button type="submit" class="btn btn-success" id="btn-submit" style="padding: 12px 30px; font-size: 16px;">💾 LƯU DỮ LIỆU VÀO GOOGLE SHEET</button>
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; align-items: center; gap: 20px;">
+                            <span id="submit-msg" style="font-weight: 500; font-size: 15px;"></span>
+                            <button type="submit" class="btn btn-success" id="btn-submit" style="padding: 12px 30px; font-size: 16px;">💾 LƯU DỮ LIỆU VÀO GOOGLE SHEET</button>
+                        </div>
                     </div>
                 </div>
             </form>
-            
-            <div id="tab-thongke" class="panel">
-                <h3 class="section-title">Thống kê lượt khám theo Khóm</h3>
-                <div class="grid-3" id="stats-container">
-                    <p style="color: var(--text-muted);">Đang tải dữ liệu...</p>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -614,6 +619,7 @@
             if(user) {
                 document.getElementById('user-fullname').innerText = JSON.parse(user).fullName;
                 showApp();
+                loadStats();
                 if(document.getElementById('f_21')) document.getElementById('f_21').valueAsDate = new Date();
             }
         };
@@ -709,8 +715,7 @@
                     setTimeout(() => {
                         document.getElementById('ksk-form').reset();
                         if(document.getElementById('f_21')) document.getElementById('f_21').valueAsDate = new Date();
-                        switchTab('tab-hanhchinh');
-                        document.querySelector('.nav-tab').classList.add('active');
+                        document.getElementById('tab-form').scrollIntoView({ behavior: 'smooth' });
                         msg.innerText = "";
                         btn.disabled = false;
                         btn.innerText = "💾 LƯU DỮ LIỆU VÀO GOOGLE SHEET";
