@@ -833,30 +833,53 @@
 
         async function login() {
             const u = document.getElementById('username').value.trim().toLowerCase();
-            const p = document.getElementById('password').value;
+            const p = document.getElementById('password').value.trim();
             const msg = document.getElementById('login-msg');
             
-            if(!u || !p) { msg.innerText = "Vui lòng nhập đầy đủ"; return; }
-            msg.innerText = "Đang đăng nhập...";
+            if(!u || !p) { msg.style.color='red'; msg.innerText = "Vui lòng nhập đầy đủ"; return; }
+            msg.style.color='var(--text-muted)';
+            msg.innerText = "Đang đăng nhập... (có thể mất 5-10 giây)";
             
             try {
-                const res = await fetch(API_URL, {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 30000);
+                
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     redirect: 'follow',
+                    signal: controller.signal,
                     body: JSON.stringify({ action: 'login', username: u, password: p })
-                }).then(r => r.json());
+                });
+                clearTimeout(timeout);
+                
+                if (!response.ok) {
+                    msg.style.color='red';
+                    msg.innerText = 'Lỗi HTTP ' + response.status + ': ' + response.statusText;
+                    return;
+                }
+                
+                const res = await response.json();
                 
                 if(res.success) {
+                    msg.style.color='green';
+                    msg.innerText = '✅ Đăng nhập thành công!';
                     localStorage.setItem('token', res.token);
                     localStorage.setItem('user', JSON.stringify(res.user));
+                    document.getElementById('user-fullname').innerText = res.user.fullName || res.user.username;
                     showApp();
                     loadStats();
                 } else {
-                    msg.innerText = res.message;
+                    msg.style.color='red';
+                    msg.innerText = '❌ ' + (res.message || 'Sai tài khoản hoặc mật khẩu');
                 }
             } catch (err) {
-                msg.innerText = "Lỗi kết nối Server: " + err;
+                msg.style.color='red';
+                if (err.name === 'AbortError') {
+                    msg.innerText = '❌ Hết thời gian chờ (30s). Server quá tải, vui lòng thử lại!';
+                } else {
+                    msg.innerText = '❌ Lỗi: ' + err.message;
+                }
             }
         }
 
