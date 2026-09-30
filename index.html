@@ -39,6 +39,7 @@
                 <button type="button" class="nav-tab active" onclick="switchTab('tab-thongke')" style="background: var(--primary-light); color: var(--primary);">📊 Thống kê</button>
                 <button type="button" class="nav-tab" onclick="switchTab('tab-form')">📝 Thêm phiếu khám</button>
                 <button type="button" class="nav-tab" onclick="switchTab('tab-quanly')">📋 Quản lý phiếu khám</button>
+                <button type="button" class="nav-tab admin-only" onclick="switchTab('tab-admin')" style="display: none; background: #fee2e2; color: #dc2626;">⚙️ Quản Trị</button>
             </div>
 
             <div id="tab-thongke" class="panel active">
@@ -68,6 +69,63 @@
                     </thead>
                     <tbody id="stats-tbody">
                         <tr><td colspan="3" style="text-align:center; padding: 20px;">Đang tải dữ liệu...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="tab-admin" class="panel">
+                <h3 class="section-title" style="color: #dc2626; border-bottom-color: #fca5a5; margin-top:0;">🛠 CÔNG CỤ QUẢN TRỊ DỮ LIỆU</h3>
+                
+                <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <button onclick="dedupRecords()" id="btn-dedup" style="background: #ef4444; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px;">
+                            🧹 Dọn Dẹp Hồ Sơ Trùng Lặp
+                        </button>
+                        <span style="color: #991b1b; font-size: 14px;">⚠️ Quét toàn bộ dữ liệu, tự động xóa các dòng trùng CCCD cũ hơn, giữ lại dòng mới nhất.</span>
+                    </div>
+                </div>
+
+                <h3 class="section-title">👥 Quản lý nhân viên (Tài khoản)</h3>
+                <div style="background: white; border: 1px solid var(--border); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4 style="margin-top:0; margin-bottom: 15px;">Thêm / Sửa tài khoản</h4>
+                    <form id="form-user" onsubmit="saveUser(event)" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
+                        <input type="hidden" id="u-row">
+                        <div class="form-group" style="margin: 0; width: 200px;">
+                            <label>Tên đăng nhập</label>
+                            <input type="text" id="u-username" class="form-control" required>
+                        </div>
+                        <div class="form-group" style="margin: 0; width: 200px;">
+                            <label>Mật khẩu</label>
+                            <input type="text" id="u-password" class="form-control" required>
+                        </div>
+                        <div class="form-group" style="margin: 0; width: 200px;">
+                            <label>Họ và tên</label>
+                            <input type="text" id="u-fullname" class="form-control" required>
+                        </div>
+                        <div class="form-group" style="margin: 0; width: 150px;">
+                            <label>Quyền</label>
+                            <select id="u-role" class="form-control">
+                                <option value="editor">Nhân viên</option>
+                                <option value="admin">Quản trị (Admin)</option>
+                            </select>
+                        </div>
+                        <button type="submit" id="btn-save-user" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500;">💾 Lưu</button>
+                        <button type="button" onclick="document.getElementById('form-user').reset(); document.getElementById('u-row').value='';" style="background: #94a3b8; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Hủy</button>
+                    </form>
+                </div>
+                
+                <table class="ts-table" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; border-spacing: 0;">
+                    <thead style="background: #f1f5f9;">
+                        <tr>
+                            <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid var(--border);">Tài khoản</th>
+                            <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid var(--border);">Mật khẩu</th>
+                            <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid var(--border);">Họ tên</th>
+                            <th style="padding: 12px 15px; text-align: center; border-bottom: 2px solid var(--border);">Quyền</th>
+                            <th style="padding: 12px 15px; text-align: center; border-bottom: 2px solid var(--border);">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody">
+                        <tr><td colspan="5" style="text-align: center; padding: 20px;">Đang tải...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -719,6 +777,19 @@
             if (tabId === 'tab-quanly' && allRecords.length === 0) {
                 loadRecords(1);
             }
+            if (tabId === 'tab-admin') {
+                loadUsers();
+            }
+        }
+
+        function showApp() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.role === 'admin') {
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'inline-block');
+            }
         }
 
         async function login() {
@@ -750,8 +821,7 @@
         }
 
         function showApp() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
+            // Moved to top
         }
 
         function logout() {
@@ -934,6 +1004,87 @@
             phtml += `<button onclick="loadRecords(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} style="${btnStyle} background: white;">&raquo;</button>`;
             
             pagi.innerHTML = phtml;
+        }
+        
+        async function loadUsers() {
+            const token = localStorage.getItem('token');
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">Đang tải...</td></tr>';
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({action: 'getUsers', token: token}) }).then(r => r.json());
+                if(res.success) {
+                    let html = '';
+                    res.users.forEach(u => {
+                        html += `<tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 12px 15px; border-bottom: 1px solid var(--border);">${u.username}</td>
+                            <td style="padding: 12px 15px; border-bottom: 1px solid var(--border);">${u.password}</td>
+                            <td style="padding: 12px 15px; border-bottom: 1px solid var(--border);">${u.fullName}</td>
+                            <td style="padding: 12px 15px; text-align: center; border-bottom: 1px solid var(--border);">${u.role === 'admin' ? '<span style="color:#dc2626; font-weight:600">Admin</span>' : 'Nhân viên'}</td>
+                            <td style="padding: 12px 15px; text-align: center; border-bottom: 1px solid var(--border);">
+                                <button onclick="editUser('${u.row}', '${u.username}', '${u.password}', '${u.fullName}', '${u.role}')" style="background: #3b82f6; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;">Sửa</button>
+                                <button onclick="deleteUser('${u.row}')" style="background: #ef4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer;">Xóa</button>
+                            </td>
+                        </tr>`;
+                    });
+                    tbody.innerHTML = html;
+                }
+            } catch(e) {}
+        }
+        
+        function editUser(row, u, p, f, r) {
+            document.getElementById('u-row').value = row;
+            document.getElementById('u-username').value = u;
+            document.getElementById('u-password').value = p;
+            document.getElementById('u-fullname').value = f;
+            document.getElementById('u-role').value = r;
+        }
+        
+        async function saveUser(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-user');
+            btn.innerText = "Đang lưu...";
+            const token = localStorage.getItem('token');
+            const data = {
+                row: document.getElementById('u-row').value,
+                username: document.getElementById('u-username').value,
+                password: document.getElementById('u-password').value,
+                fullName: document.getElementById('u-fullname').value,
+                role: document.getElementById('u-role').value
+            };
+            
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({action: 'saveUser', token: token, userData: data}) }).then(r => r.json());
+            alert(res.message);
+            btn.innerText = "💾 Lưu";
+            if(res.success) {
+                document.getElementById('form-user').reset();
+                document.getElementById('u-row').value = '';
+                loadUsers();
+            }
+        }
+        
+        async function deleteUser(row) {
+            if(!confirm('Bạn có chắc chắn muốn xóa tài khoản này?')) return;
+            const token = localStorage.getItem('token');
+            const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({action: 'deleteUser', token: token, row: row}) }).then(r => r.json());
+            alert(res.message);
+            if(res.success) loadUsers();
+        }
+        
+        async function dedupRecords() {
+            if(!confirm('CẢNH BÁO: Hành động này sẽ tự động xóa tất cả các hồ sơ có CCCD trùng lặp, chỉ giữ lại hồ sơ MỚI NHẤT. Bạn có muốn tiếp tục?')) return;
+            const btn = document.getElementById('btn-dedup');
+            btn.innerText = "Đang dọn dẹp... (Có thể mất 10-30s)";
+            btn.disabled = true;
+            
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({action: 'dedupRecords', token: token}) }).then(r => r.json());
+                alert(res.message);
+            } catch (err) {
+                alert('Lỗi kết nối Server');
+            }
+            btn.innerText = "🧹 Dọn Dẹp Hồ Sơ Trùng Lặp";
+            btn.disabled = false;
         }
 
         async function loadStats() {
