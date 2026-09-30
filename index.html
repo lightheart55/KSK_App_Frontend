@@ -1209,6 +1209,7 @@
                         {id: 'thuận trung', label: 'Thuận Trung', icon: '🏠', color: '#ffedd5'},
                         {id: 'thuận phát', label: 'Thuận Phát', icon: '🏠', color: '#fce7f3'}
                     ];
+                    const tongGid = (res.stats['tổng 05'] && res.stats['tổng 05'].gid) ? res.stats['tổng 05'].gid : 40887868;
                     
                     let htmlTable = '';
                     let htmlGrid = `<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border);">
@@ -1243,11 +1244,11 @@
                     
                     // Add TOTAL row to table
                     htmlTable += `
-                    <tr style="background: #e0ffff;">
-                        <td style="padding: 15px; font-weight: 700; color: var(--text-main);">TỔNG CỘNG</td>
+                    <tr style="background: #bfdbfe; border-top: 2px solid #3b82f6;">
+                        <td style="padding: 15px; font-weight: 700; color: #1e40af; font-size: 15px;">📊 TỔNG CỘNG</td>
                         <td style="padding: 15px; text-align: center; font-weight: 700; color: #dc2626; font-size: 16px; border-left: 1px solid var(--border); border-right: 1px solid var(--border);">${res.total} hồ sơ</td>
                         <td style="padding: 15px; text-align: center;">
-                            <a href="https://docs.google.com/spreadsheets/d/1CMpd1EYUCjcU4zEQFLvJNRuzfc1Ru2SOJ59XS6_00oI/export?format=xlsx" target="_blank" style="display: inline-block; background: #8b5cf6; color: white; padding: 6px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600;">📥 Tải TẤT CẢ</a>
+                            <a href="https://docs.google.com/spreadsheets/d/1CMpd1EYUCjcU4zEQFLvJNRuzfc1Ru2SOJ59XS6_00oI/export?format=xlsx&gid=${tongGid}" target="_blank" style="display: inline-block; background: #8b5cf6; color: white; padding: 6px 20px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600;">📥 Tải TỔNG 05</a>
                         </td>
                     </tr>
                     `;
