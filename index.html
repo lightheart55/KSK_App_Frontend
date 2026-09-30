@@ -68,9 +68,13 @@
     
         <div class="form-group">
             <label title="Cột 2 (Excel)">Giới tính</label>
-            <input type="text" id="f_2" class="form-control" placeholder="Nhập giới tính" >
+            <select id="f_2" class="form-control">
+                <option value="">-- Chọn giới tính --</option>
+                <option value="1">Nam</option>
+                <option value="2">Nữ</option>
+            </select>
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 3 (Excel)">Ngày sinh</label>
             <input type="date" id="f_3" class="form-control" placeholder="Nhập ngày sinh" >
@@ -175,126 +179,103 @@
     
     </div>
 </div>
-                <div id="tab-tiensu" class="panel">
-    <h3 class="section-title">Tiền sử bệnh tật</h3>
-    <div class="sub-title">Tiền sử chi tiết:</div>
-    <div class="table-container">
-        <table class="ts-table"><thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị</th></tr></thead><tbody>
-        <tr>
-            <td>1</td>
-            <td><label title="Cột 22">Có ai trong gia đình mắc bệnh không</label></td>
-            <td><input type="text" id="f_22" class="form-control" placeholder="..."></td>
-        </tr>
+                <div id="tab-tiensu" class="panel"><h3 class="section-title">Tiền sử bệnh tật</h3><h4 class="sub-title" style="margin-top: 10px;">A. Tiền sử gia đình</h4><div class="grid-4">
+        <div class="form-group">
+            <label title="Cột 22 (Excel)">Có ai trong gia đình mắc bệnh không</label>
+            <input type="text" id="f_22" class="form-control" placeholder="Nhập có ai trong gia đình mắc bệnh không" >
+        </div>
     
-        <tr>
-            <td>2</td>
-            <td><label title="Cột 23">Tên bệnh cụ thể khi trong gia đình có người mắc</label></td>
-            <td><input type="text" id="f_23" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 23 (Excel)">Tên bệnh cụ thể khi trong gia đình có người mắc</label>
+            <input type="text" id="f_23" class="form-control" placeholder="Nhập tên bệnh cụ thể khi trong gia đình có người mắc" >
+        </div>
+    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">B. Tiền sử bản thân</h4><div class="grid-4">
+        <div class="form-group">
+            <label title="Cột 24 (Excel)">Tên bệnh tiền sử bản thân</label>
+            <input type="text" id="f_24" class="form-control" placeholder="Nhập tên bệnh tiền sử bản thân" >
+        </div>
     
-        <tr>
-            <td>3</td>
-            <td><label title="Cột 24">Tên bệnh tiền sử bản thân</label></td>
-            <td><input type="text" id="f_24" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 25 (Excel)">Năm phát hiện</label>
+            <input type="text" id="f_25" class="form-control" placeholder="Nhập năm phát hiện" >
+        </div>
     
-        <tr>
-            <td>4</td>
-            <td><label title="Cột 25">Năm phát hiện</label></td>
-            <td><input type="text" id="f_25" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 26 (Excel)">Tên bệnh nghề nghiệp</label>
+            <input type="text" id="f_26" class="form-control" placeholder="Nhập tên bệnh nghề nghiệp" >
+        </div>
     
-        <tr>
-            <td>5</td>
-            <td><label title="Cột 26">Tên bệnh nghề nghiệp</label></td>
-            <td><input type="text" id="f_26" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 27 (Excel)">Năm phát hiện bệnh nghề nghiệp</label>
+            <input type="text" id="f_27" class="form-control" placeholder="Nhập năm phát hiện bệnh nghề nghiệp" >
+        </div>
+    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">C. Tiền sử sản phụ khoa (Đối với nữ)</h4><div class="grid-4">
+        <div class="form-group">
+            <label title="Cột 28 (Excel)">Bắt đầu thấy kinh nguyệt năm bao nhiêu tuổi</label>
+            <input type="text" id="f_28" class="form-control" placeholder="Nhập bắt đầu thấy kinh nguyệt năm bao nhiêu tuổi" >
+        </div>
     
-        <tr>
-            <td>6</td>
-            <td><label title="Cột 27">Năm phát hiện bệnh nghề nghiệp</label></td>
-            <td><input type="text" id="f_27" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 29 (Excel)">Tính chất  kinh nguyệt</label>
+            <input type="text" id="f_29" class="form-control" placeholder="Nhập tính chất  kinh nguyệt" >
+        </div>
     
-        <tr>
-            <td>7</td>
-            <td><label title="Cột 28">Bắt đầu thấy kinh nguyệt năm bao nhiêu tuổi</label></td>
-            <td><input type="text" id="f_28" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 30 (Excel)">Chu kỳ kinh (ngày)</label>
+            <input type="text" id="f_30" class="form-control" placeholder="Nhập chu kỳ kinh (ngày)" >
+        </div>
     
-        <tr>
-            <td>8</td>
-            <td><label title="Cột 29">Tính chất  kinh nguyệt</label></td>
-            <td><input type="text" id="f_29" class="form-control" placeholder="..."></td>
-        </tr>
-    </tbody></table>
-        <table class="ts-table"><thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị</th></tr></thead><tbody>
-        <tr>
-            <td>9</td>
-            <td><label title="Cột 30">Chu kỳ kinh (ngày)</label></td>
-            <td><input type="text" id="f_30" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 31 (Excel)">Lượng kinh (ngày)</label>
+            <input type="text" id="f_31" class="form-control" placeholder="Nhập lượng kinh (ngày)" >
+        </div>
     
-        <tr>
-            <td>10</td>
-            <td><label title="Cột 31">Lượng kinh (ngày)</label></td>
-            <td><input type="text" id="f_31" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 32 (Excel)">Đau bụng kinh</label>
+            <input type="text" id="f_32" class="form-control" placeholder="Nhập đau bụng kinh" >
+        </div>
     
-        <tr>
-            <td>11</td>
-            <td><label title="Cột 32">Đau bụng kinh</label></td>
-            <td><input type="text" id="f_32" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 33 (Excel)">Đã lập  gia đình</label>
+            <input type="text" id="f_33" class="form-control" placeholder="Nhập đã lập  gia đình" >
+        </div>
     
-        <tr>
-            <td>12</td>
-            <td><label title="Cột 33">Đã lập  gia đình</label></td>
-            <td><input type="text" id="f_33" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 34 (Excel)">PARA</label>
+            <input type="text" id="f_34" class="form-control" placeholder="Nhập para" >
+        </div>
     
-        <tr>
-            <td>13</td>
-            <td><label title="Cột 34">PARA</label></td>
-            <td><input type="text" id="f_34" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 35 (Excel)">Số lần mổ sản,   phụ khoa</label>
+            <input type="text" id="f_35" class="form-control" placeholder="Nhập số lần mổ sản,   phụ khoa" >
+        </div>
     
-        <tr>
-            <td>14</td>
-            <td><label title="Cột 35">Số lần mổ sản,   phụ khoa</label></td>
-            <td><input type="text" id="f_35" class="form-control" placeholder="..."></td>
-        </tr>
+        <div class="form-group">
+            <label title="Cột 36 (Excel)">Có đang áp dụng  BPTT không</label>
+            <input type="text" id="f_36" class="form-control" placeholder="Nhập có đang áp dụng  bptt không" >
+        </div>
     
-        <tr>
-            <td>15</td>
-            <td><label title="Cột 36">Có đang áp dụng  BPTT không</label></td>
-            <td><input type="text" id="f_36" class="form-control" placeholder="..."></td>
-        </tr>
-    
-        <tr>
-            <td>16</td>
-            <td><label title="Cột 37">Tên BPTT đang  sử dụng</label></td>
-            <td><input type="text" id="f_37" class="form-control" placeholder="..."></td>
-        </tr>
-    </tbody></table>
-    </div>
-</div>
+        <div class="form-group">
+            <label title="Cột 37 (Excel)">Tên BPTT đang  sử dụng</label>
+            <input type="text" id="f_37" class="form-control" placeholder="Nhập tên bptt đang  sử dụng" >
+        </div>
+    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"></div>
                 <div id="tab-theluc" class="panel"><h3 class="section-title">Khám thể lực</h3><div class="grid-5">
         <div class="form-group">
             <label title="Cột 38 (Excel)">Chiều cao (cm)</label>
-            <input type="text" id="f_38" class="form-control" placeholder="Nhập chiều cao (cm)" >
+            <input type="number" id="f_38" class="form-control" placeholder="Nhập chiều cao (cm)" oninput="calcBMI()">
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 39 (Excel)">Cân nặng (kg)</label>
-            <input type="text" id="f_39" class="form-control" placeholder="Nhập cân nặng (kg)" >
+            <input type="number" id="f_39" class="form-control" placeholder="Nhập cân nặng (kg)" oninput="calcBMI()">
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 40 (Excel)">Chỉ số BMI</label>
-            <input type="text" id="f_40" class="form-control" placeholder="Nhập chỉ số bmi" >
+            <input type="text" id="f_40" class="form-control" placeholder="Tự động tính" readonly style="background: #f9fafb;">
         </div>
-    
+        
         <div class="form-group">
             <label title="Cột 41 (Excel)">Mạch (lần/phút)</label>
             <input type="text" id="f_41" class="form-control" placeholder="Nhập mạch (lần/phút)" >
@@ -740,6 +721,17 @@
             const token = localStorage.getItem('token');
             if(!token) return alert('Chưa đăng nhập!');
             window.location.href = `/api/export?token=${token}`;
+        }
+
+        function calcBMI() {
+            const h = parseFloat(document.getElementById('f_38').value);
+            const w = parseFloat(document.getElementById('f_39').value);
+            if (h > 0 && w > 0) {
+                const bmi = w / ((h / 100) * (h / 100));
+                document.getElementById('f_40').value = bmi.toFixed(1);
+            } else {
+                document.getElementById('f_40').value = '';
+            }
         }
     </script>
 </body>
