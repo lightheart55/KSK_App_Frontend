@@ -1233,8 +1233,7 @@
                 }).then(r => r.json());
                 
                 if (res.success) {
-                    alert('✅ ' + res.message + '
-Bây giờ bạn có thể bấm "Tải Excel Tất Cả" để tải file tổng hợp!');
+                    alert('✅ Đã đồng bộ xong! Bây giờ bạn có thể bấm Tải Excel Tất Cả để tải file tổng hợp.');
                     loadStats();
                 } else {
                     alert('❌ Lỗi: ' + (res.message || res.error));
