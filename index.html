@@ -2,474 +2,604 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Khám Sức Khỏe</title>
-    <meta name="theme-color" content="#10b981">
-    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="theme.css">
 </head>
 <body>
     <!-- Login Screen -->
-    <div id="login-screen" class="container" style="max-width: 400px; margin-top: 10vh;">
-        <div class="card">
-            <h2 style="text-align: center; color: var(--secondary); margin-top:0;">Đăng Nhập</h2>
-            <label>Tên đăng nhập</label>
-            <input type="text" id="username" class="form-control" placeholder="Nhập tài khoản">
-            <label>Mật khẩu</label>
-            <input type="password" id="password" class="form-control" placeholder="Nhập mật khẩu">
+    <div id="login-screen">
+        <div class="login-card">
+            <h2>Đăng Nhập Hệ Thống</h2>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Tên đăng nhập</label>
+                <input type="text" id="username" class="form-control" placeholder="Nhập tài khoản">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>Mật khẩu</label>
+                <input type="password" id="password" class="form-control" placeholder="Nhập mật khẩu">
+            </div>
             <button class="btn" style="width: 100%" onclick="login()">Đăng Nhập</button>
             <p id="msg" style="color: red; text-align: center; font-size: 0.9em; margin-top: 15px;"></p>
         </div>
     </div>
 
     <!-- Main App Screen -->
-    <div id="app" class="container" style="display: none;">
+    <div id="app" style="display: none;">
         <header>
-            <h1>Khám Sức Khỏe</h1>
-            <div class="user-info">
-                <span>👤 <span id="user-fullname">Admin</span></span>
-                <button class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--info); margin-left: 10px;" onclick="exportExcel()">📥 Xuất Excel</button>
-                <button class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: var(--danger); margin-left: 5px;" onclick="logout()">Thoát</button>
+            <h1>🩺 Quản Lý Khám Sức Khỏe</h1>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span style="color: var(--text-muted); font-weight: 500;">👤 <span id="user-fullname">Admin</span></span>
+                <button class="btn btn-success" onclick="exportExcel()">📥 Xuất Excel</button>
+                <button class="btn btn-danger" onclick="logout()">Thoát</button>
             </div>
         </header>
 
-        <!-- Tabs -->
-        <div class="nav-container">
-            <button class="nav-btn active" onclick="switchTab('tab-hanhchinh')">1. Hành Chính</button>
-            <button class="nav-btn" onclick="switchTab('tab-tien-su')">2. Tiền Sử Bệnh</button>
-            <button class="nav-btn" onclick="switchTab('tab-lamsang')">3. Lâm Sàng</button>
-            <button class="nav-btn" onclick="switchTab('tab-canlamsang')">4. Cận Lâm Sàng & Kết Luận</button>
+        <div class="container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('tab-hanhchinh')">Thông tin Hành chính</button>
+                <button class="nav-tab" onclick="switchTab('tab-tiensu')">Tiền sử bệnh tật</button>
+                <button class="nav-tab" onclick="switchTab('tab-theluc')">Khám thể lực</button>
+                <button class="nav-tab" onclick="switchTab('tab-lamsang')">Khám lâm sàng</button>
+                <button class="nav-tab" onclick="switchTab('tab-canlamsang')">Cận lâm sàng</button>
+                <button class="nav-tab" onclick="switchTab('tab-ketluan')">Kết luận</button>
+            </div>
+
+            <form id="ksk-form" onsubmit="submitForm(event)">
+                <div id="tab-hanhchinh" class="panel active">
+    <h3 class="section-title">Thông tin Hành chính</h3>
+    <div class="grid-4" style="margin-bottom: 20px;">
+        <div class="form-group">
+            <label>Khóm <span class="required">*</span></label>
+            <select id="khom" class="form-control" required>
+                <option value="Thuận An">Thuận An</option>
+                <option value="Thuận Nghĩa">Thuận Nghĩa</option>
+                <option value="Thuận Phú">Thuận Phú</option>
+                <option value="Thuận Trung">Thuận Trung</option>
+                <option value="Thuận Phát">Thuận Phát</option>
+            </select>
         </div>
-
-        <!-- Form -->
-        <form id="ksk-form" onsubmit="submitForm(event)">
-
-            <!-- Tab 1: Hành chính -->
-            <div id="tab-hanhchinh" class="panel active card">
-                <h3 style="margin-top:0; color:var(--info);">1. Hành chính & Cơ sở</h3>
-                <div class="grid-2">
-                    <div style="grid-column: span 2;">
-                        <label>Khóm (*)</label>
-                        <select id="khom" class="form-control" required>
-                            <option value="Thuận An">Thuận An</option>
-                            <option value="Thuận Nghĩa">Thuận Nghĩa</option>
-                            <option value="Thuận Phú">Thuận Phú</option>
-                            <option value="Thuận Trung">Thuận Trung</option>
-                            <option value="Thuận Phát">Thuận Phát</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label title="Cột 1 (Excel)">1 - KIM THỊ CẦN - NGUYỄN THỊ ĐƯA</label>
-                        <input type="text" id="f_1" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 2 (Excel)">2 - 2 - 2</label>
-                        <input type="text" id="f_2" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 3 (Excel)">3 - 1937-01-01 00:00:00 - 1974-01-01 00:00:00</label>
-                        <input type="text" id="f_3" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 4 (Excel)">4 - 84137001987 - 87174502175</label>
-                        <input type="text" id="f_4" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 5 (Excel)">5 - 2022-12-26 00:00:00 - 2021-05-01 00:00:00</label>
-                        <input type="text" id="f_5" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 6 (Excel)">6 - Cục CSQLHCTT - Cục CSQLHCTT</label>
-                        <input type="text" id="f_6" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 7 (Excel)">7 - TỔ 7, KHÓM THUẬN AN - TỔ 9, KHÓM THUẬN AN</label>
-                        <input type="text" id="f_7" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 8 (Excel)">8 - 82 - 82</label>
-                        <input type="text" id="f_8" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 9 (Excel)">9 - 29869 - 29869</label>
-                        <input type="text" id="f_9" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 10 (Excel)">10 - 01 - 01</label>
-                        <input type="text" id="f_10" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 11 (Excel)">11</label>
-                        <input type="text" id="f_11" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 12 (Excel)">12</label>
-                        <input type="text" id="f_12" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 13 (Excel)">13</label>
-                        <input type="text" id="f_13" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 14 (Excel)">14</label>
-                        <input type="text" id="f_14" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 15 (Excel)">15</label>
-                        <input type="text" id="f_15" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 16 (Excel)">16 - KHÔNG - 823669970</label>
-                        <input type="text" id="f_16" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 17 (Excel)">17</label>
-                        <input type="text" id="f_17" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 18 (Excel)">18 - 1 - 1</label>
-                        <input type="text" id="f_18" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 19 (Excel)">19 - 87161 - 87161</label>
-                        <input type="text" id="f_19" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 20 (Excel)">20 - không - không</label>
-                        <input type="text" id="f_20" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 21 (Excel)">21</label>
-                        <input type="text" id="f_21" class="form-control">
-                    </div></div>
-            </div>
-
-            <!-- Tab 2: Tiền sử -->
-            <div id="tab-tien-su" class="panel card">
-                <h3 style="margin-top:0; color:var(--info);">2. Tiền sử bệnh tật</h3>
-                <div class="grid-2">
-                    <div>
-                        <label title="Cột 22 (Excel)">22 - KHÔNG - KHỎE</label>
-                        <input type="text" id="f_22" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 23 (Excel)">23</label>
-                        <input type="text" id="f_23" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 24 (Excel)">24 - KHỎE - KHỎE</label>
-                        <input type="text" id="f_24" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 25 (Excel)">25</label>
-                        <input type="text" id="f_25" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 26 (Excel)">26</label>
-                        <input type="text" id="f_26" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 27 (Excel)">27</label>
-                        <input type="text" id="f_27" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 28 (Excel)">28 - 15 - 15</label>
-                        <input type="text" id="f_28" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 29 (Excel)">ĐỀU - ĐỀU</label>
-                        <input type="text" id="f_29" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 30 (Excel)">30 - 30 - 30</label>
-                        <input type="text" id="f_30" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 31 (Excel)">31 - 4 - 3</label>
-                        <input type="text" id="f_31" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 32 (Excel)">32 - KHÔNG</label>
-                        <input type="text" id="f_32" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 33 (Excel)">33</label>
-                        <input type="text" id="f_33" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 34 (Excel)">34 - 5005 - 2002</label>
-                        <input type="text" id="f_34" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 35 (Excel)">35 - KHÔNG - CÓ</label>
-                        <input type="text" id="f_35" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 36 (Excel)">36 - KHÔNG - MỔ BẮT CON 1 LẦN</label>
-                        <input type="text" id="f_36" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 37 (Excel)">37</label>
-                        <input type="text" id="f_37" class="form-control">
-                    </div></div>
-            </div>
-
-            <!-- Tab 3: Lâm sàng -->
-            <div id="tab-lamsang" class="panel card">
-                <h3 style="margin-top:0; color:var(--info);">3. Khám thể lực & Lâm sàng</h3>
-                <div class="grid-2">
-                    <div>
-                        <label title="Cột 38 (Excel)">38 - 154 - 155</label>
-                        <input type="text" id="f_38" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 39 (Excel)">39 - 50 - 55</label>
-                        <input type="text" id="f_39" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 40 (Excel)">40 - 21.1 - 22.9</label>
-                        <input type="text" id="f_40" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 41 (Excel)">41 - 94 - 87</label>
-                        <input type="text" id="f_41" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 42 (Excel)">42 - 120/80 - 170/80</label>
-                        <input type="text" id="f_42" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 43 (Excel)">43 - T1,T2 đều - T1,T2 đều</label>
-                        <input type="text" id="f_43" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 44 (Excel)">44 - phổi thô - phổi thô</label>
-                        <input type="text" id="f_44" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 45 (Excel)">45 - bụng mềm - bụng mềm</label>
-                        <input type="text" id="f_45" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 46 (Excel)">46 - chạm thận (-) - chạm thận (-)</label>
-                        <input type="text" id="f_46" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 47 (Excel)">47 - chưa ghi nhận  bất thường - chưa ghi nhận  bất thường</label>
-                        <input type="text" id="f_47" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 48 (Excel)">48 - không dấu thần  kinh khu trú - không dấu thần  kinh khu...</label>
-                        <input type="text" id="f_48" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 49 (Excel)">49 - chưa ghi nhận  bất thường - chưa ghi nhận  bất thường</label>
-                        <input type="text" id="f_49" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 50 (Excel)">50 - chưa ghi nhận  bất thường - chưa ghi nhận  bất thường</label>
-                        <input type="text" id="f_50" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 51 (Excel)">51 - chưa ghi nhận  bất thường - chưa ghi nhận  bất thường</label>
-                        <input type="text" id="f_51" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 52 (Excel)">52 - chưa ghi nhận bất thường - chưa ghi nhận bất thường</label>
-                        <input type="text" id="f_52" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 53 (Excel)">53 - 3/10 - 8/10</label>
-                        <input type="text" id="f_53" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 54 (Excel)">54 - 3/10 - 9/10</label>
-                        <input type="text" id="f_54" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 55 (Excel)">55</label>
-                        <input type="text" id="f_55" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 56 (Excel)">56</label>
-                        <input type="text" id="f_56" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 57 (Excel)">57</label>
-                        <input type="text" id="f_57" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 58 (Excel)">58 - loại IV - loại II</label>
-                        <input type="text" id="f_58" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 59 (Excel)">59 - 5 - 5</label>
-                        <input type="text" id="f_59" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 60 (Excel)">60 - 0.5 - 0.5</label>
-                        <input type="text" id="f_60" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 61 (Excel)">61</label>
-                        <input type="text" id="f_61" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 62 (Excel)">62</label>
-                        <input type="text" id="f_62" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 63 (Excel)">63</label>
-                        <input type="text" id="f_63" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 64 (Excel)">64 - LOẠI I - LOẠI I</label>
-                        <input type="text" id="f_64" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 65 (Excel)">65 - sức nhai 40% - sức nhai 90%</label>
-                        <input type="text" id="f_65" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 66 (Excel)">66 - sức nhai 40% - sức nhai 90%</label>
-                        <input type="text" id="f_66" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 67 (Excel)">67 - chưa ghi nhận  bất thường - chưa ghi nhận  bất thường</label>
-                        <input type="text" id="f_67" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 68 (Excel)">68 - LOẠI IV - LOẠI I</label>
-                        <input type="text" id="f_68" class="form-control">
-                    </div></div>
-            </div>
-
-            <!-- Tab 4: Cận lâm sàng & Kết luận -->
-            <div id="tab-canlamsang" class="panel card">
-                <h3 style="margin-top:0; color:var(--info);">4. Cận lâm sàng & Kết luận</h3>
-                <div class="grid-2">
-                    <div>
-                        <label title="Cột 69 (Excel)">69</label>
-                        <input type="text" id="f_69" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 70 (Excel)">70</label>
-                        <input type="text" id="f_70" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 71 (Excel)">71</label>
-                        <input type="text" id="f_71" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 72 (Excel)">72</label>
-                        <input type="text" id="f_72" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 73 (Excel)">73</label>
-                        <input type="text" id="f_73" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 74 (Excel)">74</label>
-                        <input type="text" id="f_74" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 75 (Excel)">75</label>
-                        <input type="text" id="f_75" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 76 (Excel)">76</label>
-                        <input type="text" id="f_76" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 77 (Excel)">77</label>
-                        <input type="text" id="f_77" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 78 (Excel)">78</label>
-                        <input type="text" id="f_78" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 79 (Excel)">79</label>
-                        <input type="text" id="f_79" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 80 (Excel)">80</label>
-                        <input type="text" id="f_80" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 81 (Excel)">81</label>
-                        <input type="text" id="f_81" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 82 (Excel)">82</label>
-                        <input type="text" id="f_82" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 83 (Excel)">83</label>
-                        <input type="text" id="f_83" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 84 (Excel)">84 - LOẠI IV - LOẠI II</label>
-                        <input type="text" id="f_84" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 85 (Excel)">85</label>
-                        <input type="text" id="f_85" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 86 (Excel)">86</label>
-                        <input type="text" id="f_86" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 87 (Excel)">58 - loại IV - loại II</label>
-                        <input type="text" id="f_87" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 88 (Excel)">64 - LOẠI I - LOẠI I</label>
-                        <input type="text" id="f_88" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 89 (Excel)">68 - LOẠI IV - LOẠI I</label>
-                        <input type="text" id="f_89" class="form-control">
-                    </div>
-                    <div>
-                        <label title="Cột 90 (Excel)">87 - > 60T - > 60T THA</label>
-                        <input type="text" id="f_90" class="form-control">
-                    </div></div>
+    </div>
+    <div class="grid-4">
+        
+        <div class="form-group">
+            <label title="Cột 1 (Excel)">NGUYỄN THỊ ĐƯA</label>
+            <input type="text" id="f_1" class="form-control" placeholder="Nhập nguyễn thị đưa">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 2 (Excel)">2</label>
+            <input type="text" id="f_2" class="form-control" placeholder="Nhập 2">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 3 (Excel)">1974-01-01 00:00:00</label>
+            <input type="text" id="f_3" class="form-control" placeholder="Nhập 1974-01-01 00:00:00">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 4 (Excel)">87174502175</label>
+            <input type="text" id="f_4" class="form-control" placeholder="Nhập 87174502175">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 5 (Excel)">2021-05-01 00:00:00</label>
+            <input type="text" id="f_5" class="form-control" placeholder="Nhập 2021-05-01 00:00:00">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 6 (Excel)">Cục CSQLHCTT</label>
+            <input type="text" id="f_6" class="form-control" placeholder="Nhập cục csqlhctt">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 7 (Excel)">TỔ 9, KHÓM THUẬN AN</label>
+            <input type="text" id="f_7" class="form-control" placeholder="Nhập tổ 9, khóm thuận an">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 8 (Excel)">82</label>
+            <input type="text" id="f_8" class="form-control" placeholder="Nhập 82">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 9 (Excel)">29869</label>
+            <input type="text" id="f_9" class="form-control" placeholder="Nhập 29869">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 10 (Excel)">01</label>
+            <input type="text" id="f_10" class="form-control" placeholder="Nhập 01">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 11 (Excel)">11</label>
+            <input type="text" id="f_11" class="form-control" placeholder="Nhập 11">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 12 (Excel)">12</label>
+            <input type="text" id="f_12" class="form-control" placeholder="Nhập 12">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 13 (Excel)">13</label>
+            <input type="text" id="f_13" class="form-control" placeholder="Nhập 13">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 14 (Excel)">14</label>
+            <input type="text" id="f_14" class="form-control" placeholder="Nhập 14">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 15 (Excel)">15</label>
+            <input type="text" id="f_15" class="form-control" placeholder="Nhập 15">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 16 (Excel)">823669970</label>
+            <input type="text" id="f_16" class="form-control" placeholder="Nhập 823669970">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 17 (Excel)">17</label>
+            <input type="text" id="f_17" class="form-control" placeholder="Nhập 17">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 18 (Excel)">1</label>
+            <input type="text" id="f_18" class="form-control" placeholder="Nhập 1">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 19 (Excel)">87161</label>
+            <input type="text" id="f_19" class="form-control" placeholder="Nhập 87161">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 20 (Excel)">không</label>
+            <input type="text" id="f_20" class="form-control" placeholder="Nhập không">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 21 (Excel)">21</label>
+            <input type="text" id="f_21" class="form-control" placeholder="Nhập 21">
+        </div>
+    
+    </div>
+</div>
+                <div id="tab-tiensu" class="panel">
+    <h3 class="section-title">Tiền sử bệnh tật</h3>
+    <div class="sub-title">Tiền sử chi tiết:</div>
+    <div class="table-container">
+        <table class="ts-table">
+            <thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị / Lựa chọn</th></tr></thead>
+            <tbody>
+        <tr>
+            <td>1</td>
+            <td><label title="Cột 22">KHỎE</label></td>
+            <td><input type="text" id="f_22" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>2</td>
+            <td><label title="Cột 23">23</label></td>
+            <td><input type="text" id="f_23" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>3</td>
+            <td><label title="Cột 24">KHỎE</label></td>
+            <td><input type="text" id="f_24" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>4</td>
+            <td><label title="Cột 25">25</label></td>
+            <td><input type="text" id="f_25" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>5</td>
+            <td><label title="Cột 26">26</label></td>
+            <td><input type="text" id="f_26" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>6</td>
+            <td><label title="Cột 27">27</label></td>
+            <td><input type="text" id="f_27" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>7</td>
+            <td><label title="Cột 28">15</label></td>
+            <td><input type="text" id="f_28" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>8</td>
+            <td><label title="Cột 29">ĐỀU</label></td>
+            <td><input type="text" id="f_29" class="form-control" placeholder="..."></td>
+        </tr>
+    </tbody>
+        </table>
+        <table class="ts-table">
+            <thead><tr><th width="40">STT</th><th>Thông tin Tiền sử</th><th width="200">Giá trị / Lựa chọn</th></tr></thead>
+            <tbody>
+        <tr>
+            <td>9</td>
+            <td><label title="Cột 30">30</label></td>
+            <td><input type="text" id="f_30" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>10</td>
+            <td><label title="Cột 31">3</label></td>
+            <td><input type="text" id="f_31" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>11</td>
+            <td><label title="Cột 32">KHÔNG</label></td>
+            <td><input type="text" id="f_32" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>12</td>
+            <td><label title="Cột 33">33</label></td>
+            <td><input type="text" id="f_33" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>13</td>
+            <td><label title="Cột 34">2002</label></td>
+            <td><input type="text" id="f_34" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>14</td>
+            <td><label title="Cột 35">CÓ</label></td>
+            <td><input type="text" id="f_35" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>15</td>
+            <td><label title="Cột 36">MỔ BẮT CON 1 LẦN</label></td>
+            <td><input type="text" id="f_36" class="form-control" placeholder="..."></td>
+        </tr>
+    
+        <tr>
+            <td>16</td>
+            <td><label title="Cột 37">37</label></td>
+            <td><input type="text" id="f_37" class="form-control" placeholder="..."></td>
+        </tr>
+    </tbody>
+        </table>
+    </div>
+</div>
+                <div id="tab-theluc" class="panel">
+    <h3 class="section-title">Khám thể lực</h3>
+    <div class="grid-5">
+        
+        <div class="form-group">
+            <label title="Cột 38 (Excel)">155</label>
+            <input type="text" id="f_38" class="form-control" placeholder="Nhập 155">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 39 (Excel)">55</label>
+            <input type="text" id="f_39" class="form-control" placeholder="Nhập 55">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 40 (Excel)">22.9</label>
+            <input type="text" id="f_40" class="form-control" placeholder="Nhập 22.9">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 41 (Excel)">87</label>
+            <input type="text" id="f_41" class="form-control" placeholder="Nhập 87">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 42 (Excel)">170/80</label>
+            <input type="text" id="f_42" class="form-control" placeholder="Nhập 170/80">
+        </div>
+    
+    </div>
+</div>
+                <div id="tab-lamsang" class="panel">
+    <h3 class="section-title">Khám lâm sàng</h3>
+    <div class="grid-3">
+        
+        <div class="form-group">
+            <label title="Cột 43 (Excel)">T1,T2 đều</label>
+            <input type="text" id="f_43" class="form-control" placeholder="Nhập t1,t2 đều">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 44 (Excel)">phổi thô</label>
+            <input type="text" id="f_44" class="form-control" placeholder="Nhập phổi thô">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 45 (Excel)">bụng mềm</label>
+            <input type="text" id="f_45" class="form-control" placeholder="Nhập bụng mềm">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 46 (Excel)">chạm thận (-)</label>
+            <input type="text" id="f_46" class="form-control" placeholder="Nhập chạm thận (-)">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 47 (Excel)">chưa ghi nhận  bất thường</label>
+            <input type="text" id="f_47" class="form-control" placeholder="Nhập chưa ghi nhận  bất thường">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 48 (Excel)">không dấu thần  kinh khu trú</label>
+            <input type="text" id="f_48" class="form-control" placeholder="Nhập không dấu thần  kinh khu trú">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 49 (Excel)">chưa ghi nhận  bất thường</label>
+            <input type="text" id="f_49" class="form-control" placeholder="Nhập chưa ghi nhận  bất thường">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 50 (Excel)">chưa ghi nhận  bất thường</label>
+            <input type="text" id="f_50" class="form-control" placeholder="Nhập chưa ghi nhận  bất thường">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 51 (Excel)">chưa ghi nhận  bất thường</label>
+            <input type="text" id="f_51" class="form-control" placeholder="Nhập chưa ghi nhận  bất thường">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 52 (Excel)">chưa ghi nhận bất thường</label>
+            <input type="text" id="f_52" class="form-control" placeholder="Nhập chưa ghi nhận bất thường">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 53 (Excel)">8/10</label>
+            <input type="text" id="f_53" class="form-control" placeholder="Nhập 8/10">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 54 (Excel)">9/10</label>
+            <input type="text" id="f_54" class="form-control" placeholder="Nhập 9/10">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 55 (Excel)">55</label>
+            <input type="text" id="f_55" class="form-control" placeholder="Nhập 55">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 56 (Excel)">56</label>
+            <input type="text" id="f_56" class="form-control" placeholder="Nhập 56">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 57 (Excel)">57</label>
+            <input type="text" id="f_57" class="form-control" placeholder="Nhập 57">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 58 (Excel)">loại II</label>
+            <input type="text" id="f_58" class="form-control" placeholder="Nhập loại ii">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 59 (Excel)">5</label>
+            <input type="text" id="f_59" class="form-control" placeholder="Nhập 5">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 60 (Excel)">0.5</label>
+            <input type="text" id="f_60" class="form-control" placeholder="Nhập 0.5">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 61 (Excel)">61</label>
+            <input type="text" id="f_61" class="form-control" placeholder="Nhập 61">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 62 (Excel)">62</label>
+            <input type="text" id="f_62" class="form-control" placeholder="Nhập 62">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 63 (Excel)">63</label>
+            <input type="text" id="f_63" class="form-control" placeholder="Nhập 63">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 64 (Excel)">LOẠI I</label>
+            <input type="text" id="f_64" class="form-control" placeholder="Nhập loại i">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 65 (Excel)">sức nhai 90%</label>
+            <input type="text" id="f_65" class="form-control" placeholder="Nhập sức nhai 90%">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 66 (Excel)">sức nhai 90%</label>
+            <input type="text" id="f_66" class="form-control" placeholder="Nhập sức nhai 90%">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 67 (Excel)">chưa ghi nhận  bất thường</label>
+            <input type="text" id="f_67" class="form-control" placeholder="Nhập chưa ghi nhận  bất thường">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 68 (Excel)">LOẠI I</label>
+            <input type="text" id="f_68" class="form-control" placeholder="Nhập loại i">
+        </div>
+    
+    </div>
+</div>
+                <div id="tab-canlamsang" class="panel">
+    <h3 class="section-title">Cận lâm sàng</h3>
+    <div class="grid-4">
+        
+        <div class="form-group">
+            <label title="Cột 69 (Excel)">69</label>
+            <input type="text" id="f_69" class="form-control" placeholder="Nhập 69">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 70 (Excel)">70</label>
+            <input type="text" id="f_70" class="form-control" placeholder="Nhập 70">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 71 (Excel)">71</label>
+            <input type="text" id="f_71" class="form-control" placeholder="Nhập 71">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 72 (Excel)">72</label>
+            <input type="text" id="f_72" class="form-control" placeholder="Nhập 72">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 73 (Excel)">73</label>
+            <input type="text" id="f_73" class="form-control" placeholder="Nhập 73">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 74 (Excel)">74</label>
+            <input type="text" id="f_74" class="form-control" placeholder="Nhập 74">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 75 (Excel)">75</label>
+            <input type="text" id="f_75" class="form-control" placeholder="Nhập 75">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 76 (Excel)">76</label>
+            <input type="text" id="f_76" class="form-control" placeholder="Nhập 76">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 77 (Excel)">77</label>
+            <input type="text" id="f_77" class="form-control" placeholder="Nhập 77">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 78 (Excel)">78</label>
+            <input type="text" id="f_78" class="form-control" placeholder="Nhập 78">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 79 (Excel)">79</label>
+            <input type="text" id="f_79" class="form-control" placeholder="Nhập 79">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 80 (Excel)">80</label>
+            <input type="text" id="f_80" class="form-control" placeholder="Nhập 80">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 81 (Excel)">81</label>
+            <input type="text" id="f_81" class="form-control" placeholder="Nhập 81">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 82 (Excel)">82</label>
+            <input type="text" id="f_82" class="form-control" placeholder="Nhập 82">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 83 (Excel)">83</label>
+            <input type="text" id="f_83" class="form-control" placeholder="Nhập 83">
+        </div>
+    
+    </div>
+</div>
                 
-                <div style="margin-top: 20px; text-align: right; grid-column: span 2;">
-                    <p id="submit-msg" style="display:inline-block; margin-right: 15px; font-weight:bold;"></p>
-                    <button type="submit" class="btn" id="btn-submit" style="min-width: 150px;">💾 LƯU DỮ LIỆU</button>
-                </div>
-            </div>
+                <div id="tab-ketluan" class="panel">
+                    
+    <h3 class="section-title">Kết luận</h3>
+    <div class="grid-2">
+        
+        <div class="form-group">
+            <label title="Cột 84 (Excel)">LOẠI II</label>
+            <input type="text" id="f_84" class="form-control" placeholder="Nhập loại ii">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 85 (Excel)">85</label>
+            <input type="text" id="f_85" class="form-control" placeholder="Nhập 85">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 86 (Excel)">86</label>
+            <input type="text" id="f_86" class="form-control" placeholder="Nhập 86">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 87 (Excel)">loại II</label>
+            <input type="text" id="f_87" class="form-control" placeholder="Nhập loại ii">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 88 (Excel)">LOẠI I</label>
+            <input type="text" id="f_88" class="form-control" placeholder="Nhập loại i">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 89 (Excel)">LOẠI I</label>
+            <input type="text" id="f_89" class="form-control" placeholder="Nhập loại i">
+        </div>
+    
+        <div class="form-group">
+            <label title="Cột 90 (Excel)">> 60T THA</label>
+            <input type="text" id="f_90" class="form-control" placeholder="Nhập > 60t tha">
+        </div>
+    
+    </div>
 
-</form>
+                    
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; align-items: center; gap: 20px;">
+                        <span id="submit-msg" style="font-weight: 500; font-size: 15px;"></span>
+                        <button type="submit" class="btn btn-success" id="btn-submit" style="padding: 12px 30px; font-size: 16px;">💾 LƯU DỮ LIỆU VÀO GOOGLE SHEET</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbwhMPW7PRVIi_7Qa6BdtKSH29ePJBCho03pnwO8rwYmfuDErDouyEd_bsm5dk2T_y7Yhw/exec';
 
-        // Khởi động
         window.onload = () => {
             const user = localStorage.getItem('user');
             if(user) {
                 document.getElementById('user-fullname').innerText = JSON.parse(user).fullName;
                 showApp();
-                if(document.getElementById('f_21')) document.getElementById('f_21').valueAsDate = new Date(); // set ngày hôm nay
+                if(document.getElementById('f_21')) document.getElementById('f_21').valueAsDate = new Date();
             }
         };
 
-        // Chuyển Tab
         function switchTab(tabId) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            
+            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
         }
 
-        // Login
         async function login() {
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
@@ -508,7 +638,6 @@
             location.reload();
         }
 
-        // Lưu dữ liệu
         async function submitForm(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
@@ -518,100 +647,12 @@
             btn.innerText = "Đang lưu...";
             msg.innerText = "";
 
-            // Thu thập data map thành object
-                        const formData = new Array(91).fill("");
-            formData[0] = ""; // STT
-            formData[1] = document.getElementById("f_1") ? document.getElementById("f_1").value : "";
-            formData[2] = document.getElementById("f_2") ? document.getElementById("f_2").value : "";
-            formData[3] = document.getElementById("f_3") ? document.getElementById("f_3").value : "";
-            formData[4] = document.getElementById("f_4") ? document.getElementById("f_4").value : "";
-            formData[5] = document.getElementById("f_5") ? document.getElementById("f_5").value : "";
-            formData[6] = document.getElementById("f_6") ? document.getElementById("f_6").value : "";
-            formData[7] = document.getElementById("f_7") ? document.getElementById("f_7").value : "";
-            formData[8] = document.getElementById("f_8") ? document.getElementById("f_8").value : "";
-            formData[9] = document.getElementById("f_9") ? document.getElementById("f_9").value : "";
-            formData[10] = document.getElementById("f_10") ? document.getElementById("f_10").value : "";
-            formData[11] = document.getElementById("f_11") ? document.getElementById("f_11").value : "";
-            formData[12] = document.getElementById("f_12") ? document.getElementById("f_12").value : "";
-            formData[13] = document.getElementById("f_13") ? document.getElementById("f_13").value : "";
-            formData[14] = document.getElementById("f_14") ? document.getElementById("f_14").value : "";
-            formData[15] = document.getElementById("f_15") ? document.getElementById("f_15").value : "";
-            formData[16] = document.getElementById("f_16") ? document.getElementById("f_16").value : "";
-            formData[17] = document.getElementById("f_17") ? document.getElementById("f_17").value : "";
-            formData[18] = document.getElementById("f_18") ? document.getElementById("f_18").value : "";
-            formData[19] = document.getElementById("f_19") ? document.getElementById("f_19").value : "";
-            formData[20] = document.getElementById("f_20") ? document.getElementById("f_20").value : "";
-            formData[21] = document.getElementById("f_21") ? document.getElementById("f_21").value : "";
-            formData[22] = document.getElementById("f_22") ? document.getElementById("f_22").value : "";
-            formData[23] = document.getElementById("f_23") ? document.getElementById("f_23").value : "";
-            formData[24] = document.getElementById("f_24") ? document.getElementById("f_24").value : "";
-            formData[25] = document.getElementById("f_25") ? document.getElementById("f_25").value : "";
-            formData[26] = document.getElementById("f_26") ? document.getElementById("f_26").value : "";
-            formData[27] = document.getElementById("f_27") ? document.getElementById("f_27").value : "";
-            formData[28] = document.getElementById("f_28") ? document.getElementById("f_28").value : "";
-            formData[29] = document.getElementById("f_29") ? document.getElementById("f_29").value : "";
-            formData[30] = document.getElementById("f_30") ? document.getElementById("f_30").value : "";
-            formData[31] = document.getElementById("f_31") ? document.getElementById("f_31").value : "";
-            formData[32] = document.getElementById("f_32") ? document.getElementById("f_32").value : "";
-            formData[33] = document.getElementById("f_33") ? document.getElementById("f_33").value : "";
-            formData[34] = document.getElementById("f_34") ? document.getElementById("f_34").value : "";
-            formData[35] = document.getElementById("f_35") ? document.getElementById("f_35").value : "";
-            formData[36] = document.getElementById("f_36") ? document.getElementById("f_36").value : "";
-            formData[37] = document.getElementById("f_37") ? document.getElementById("f_37").value : "";
-            formData[38] = document.getElementById("f_38") ? document.getElementById("f_38").value : "";
-            formData[39] = document.getElementById("f_39") ? document.getElementById("f_39").value : "";
-            formData[40] = document.getElementById("f_40") ? document.getElementById("f_40").value : "";
-            formData[41] = document.getElementById("f_41") ? document.getElementById("f_41").value : "";
-            formData[42] = document.getElementById("f_42") ? document.getElementById("f_42").value : "";
-            formData[43] = document.getElementById("f_43") ? document.getElementById("f_43").value : "";
-            formData[44] = document.getElementById("f_44") ? document.getElementById("f_44").value : "";
-            formData[45] = document.getElementById("f_45") ? document.getElementById("f_45").value : "";
-            formData[46] = document.getElementById("f_46") ? document.getElementById("f_46").value : "";
-            formData[47] = document.getElementById("f_47") ? document.getElementById("f_47").value : "";
-            formData[48] = document.getElementById("f_48") ? document.getElementById("f_48").value : "";
-            formData[49] = document.getElementById("f_49") ? document.getElementById("f_49").value : "";
-            formData[50] = document.getElementById("f_50") ? document.getElementById("f_50").value : "";
-            formData[51] = document.getElementById("f_51") ? document.getElementById("f_51").value : "";
-            formData[52] = document.getElementById("f_52") ? document.getElementById("f_52").value : "";
-            formData[53] = document.getElementById("f_53") ? document.getElementById("f_53").value : "";
-            formData[54] = document.getElementById("f_54") ? document.getElementById("f_54").value : "";
-            formData[55] = document.getElementById("f_55") ? document.getElementById("f_55").value : "";
-            formData[56] = document.getElementById("f_56") ? document.getElementById("f_56").value : "";
-            formData[57] = document.getElementById("f_57") ? document.getElementById("f_57").value : "";
-            formData[58] = document.getElementById("f_58") ? document.getElementById("f_58").value : "";
-            formData[59] = document.getElementById("f_59") ? document.getElementById("f_59").value : "";
-            formData[60] = document.getElementById("f_60") ? document.getElementById("f_60").value : "";
-            formData[61] = document.getElementById("f_61") ? document.getElementById("f_61").value : "";
-            formData[62] = document.getElementById("f_62") ? document.getElementById("f_62").value : "";
-            formData[63] = document.getElementById("f_63") ? document.getElementById("f_63").value : "";
-            formData[64] = document.getElementById("f_64") ? document.getElementById("f_64").value : "";
-            formData[65] = document.getElementById("f_65") ? document.getElementById("f_65").value : "";
-            formData[66] = document.getElementById("f_66") ? document.getElementById("f_66").value : "";
-            formData[67] = document.getElementById("f_67") ? document.getElementById("f_67").value : "";
-            formData[68] = document.getElementById("f_68") ? document.getElementById("f_68").value : "";
-            formData[69] = document.getElementById("f_69") ? document.getElementById("f_69").value : "";
-            formData[70] = document.getElementById("f_70") ? document.getElementById("f_70").value : "";
-            formData[71] = document.getElementById("f_71") ? document.getElementById("f_71").value : "";
-            formData[72] = document.getElementById("f_72") ? document.getElementById("f_72").value : "";
-            formData[73] = document.getElementById("f_73") ? document.getElementById("f_73").value : "";
-            formData[74] = document.getElementById("f_74") ? document.getElementById("f_74").value : "";
-            formData[75] = document.getElementById("f_75") ? document.getElementById("f_75").value : "";
-            formData[76] = document.getElementById("f_76") ? document.getElementById("f_76").value : "";
-            formData[77] = document.getElementById("f_77") ? document.getElementById("f_77").value : "";
-            formData[78] = document.getElementById("f_78") ? document.getElementById("f_78").value : "";
-            formData[79] = document.getElementById("f_79") ? document.getElementById("f_79").value : "";
-            formData[80] = document.getElementById("f_80") ? document.getElementById("f_80").value : "";
-            formData[81] = document.getElementById("f_81") ? document.getElementById("f_81").value : "";
-            formData[82] = document.getElementById("f_82") ? document.getElementById("f_82").value : "";
-            formData[83] = document.getElementById("f_83") ? document.getElementById("f_83").value : "";
-            formData[84] = document.getElementById("f_84") ? document.getElementById("f_84").value : "";
-            formData[85] = document.getElementById("f_85") ? document.getElementById("f_85").value : "";
-            formData[86] = document.getElementById("f_86") ? document.getElementById("f_86").value : "";
-            formData[87] = document.getElementById("f_87") ? document.getElementById("f_87").value : "";
-            formData[88] = document.getElementById("f_88") ? document.getElementById("f_88").value : "";
-            formData[89] = document.getElementById("f_89") ? document.getElementById("f_89").value : "";
-            formData[90] = document.getElementById("f_90") ? document.getElementById("f_90").value : "";
-
+            const formData = new Array(91).fill("");
+            formData[0] = "";
+            for(let i=1; i<=90; i++) {
+                const el = document.getElementById("f_"+i);
+                if(el) formData[i] = el.value;
+            }
             const khom = document.getElementById("khom").value;
 
             const token = localStorage.getItem('token');
@@ -627,37 +668,32 @@
                 if(res.success) {
                     msg.style.color = "var(--success)";
                     msg.innerText = "✅ Lưu thành công!";
-                    // Reset form sau 2 giây
                     setTimeout(() => {
                         document.getElementById('ksk-form').reset();
                         if(document.getElementById('f_21')) document.getElementById('f_21').valueAsDate = new Date();
                         switchTab('tab-hanhchinh');
-                        document.querySelector('.nav-btn').classList.add('active'); // active lại nút đầu tiên
+                        document.querySelector('.nav-tab').classList.add('active');
                         msg.innerText = "";
                         btn.disabled = false;
-                        btn.innerText = "💾 LƯU DỮ LIỆU";
+                        btn.innerText = "💾 LƯU DỮ LIỆU VÀO GOOGLE SHEET";
                     }, 2000);
                 } else {
                     msg.style.color = "var(--danger)";
                     msg.innerText = "❌ Lỗi: " + res.message;
                     btn.disabled = false;
-                    btn.innerText = "💾 LƯU DỮ LIỆU";
+                    btn.innerText = "💾 LƯU DỮ LIỆU VÀO GOOGLE SHEET";
                 }
             } catch (err) {
                 msg.style.color = "var(--danger)";
                 msg.innerText = "❌ Lỗi kết nối Server";
                 btn.disabled = false;
-                btn.innerText = "💾 LƯU DỮ LIỆU";
+                btn.innerText = "💾 LƯU DỮ LIỆU VÀO GOOGLE SHEET";
             }
         }
 
-        // Tải File Excel
         function exportExcel() {
             const token = localStorage.getItem('token');
             if(!token) return alert('Chưa đăng nhập!');
-            
-            // Chuyển hướng trình duyệt sang đường dẫn API để tải file về
-            // Chèn token vào query parameter
             window.location.href = `/api/export?token=${token}`;
         }
     </script>
