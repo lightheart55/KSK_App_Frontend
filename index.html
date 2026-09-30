@@ -340,7 +340,7 @@
             <label title="Cột 49 (Excel)">Tâm thần</label>
             <input type="text" id="f_49" class="form-control" placeholder="Nhập tâm thần" value="tiếp xúc tốt">
         </div>
-    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">B. Ngoại khoa, Da liễu, Sản phụ khoa</h4><div class="grid-3">
+    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">B. Ngoại khoa, C. Da liễu, D. Sản phụ khoa</h4><div class="grid-3">
         <div class="form-group">
             <label title="Cột 50 (Excel)">Kết quả khám ngoại khoa</label>
             <input type="text" id="f_50" class="form-control" placeholder="Nhập kết quả khám ngoại khoa" value="chưa ghi nhận bất thường">
@@ -391,9 +391,22 @@
     
         <div class="form-group">
             <label title="Cột 58 (Excel)">Kết luận về mắt</label>
-            <input type="text" id="f_58" class="form-control" placeholder="Nhập kết luận về mắt" >
+            <div style="position: relative;">
+                <select id="f_58_select" class="form-control"
+                    onchange="document.getElementById('f_58').value = this.value"
+                    oninput="document.getElementById('f_58').value = this.value">
+                    <option value="">-- Chọn phân loại --</option>
+                    <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
+                    <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
+                    <option value="Loại III (Trung bình)">Loại III (Trung bình)</option>
+                    <option value="Loại IV (Yếu)">Loại IV (Yếu)</option>
+                    <option value="Loại V (Rất yếu)">Loại V (Rất yếu)</option>
+                </select>
+                <input type="text" id="f_58" class="form-control" placeholder="Nhập kết luận về mắt"
+                    style="position: absolute; left: 1px; top: 1px; width: calc(100% - 35px); height: calc(100% - 2px); border: none; box-shadow: none; border-radius: 5px 0 0 5px; outline: none; background: #fff;" >
+            </div>
         </div>
-    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">F. Tai - Mũi - Họng</h4><div class="grid-3">
+        </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">F. Tai - Mũi - Họng</h4><div class="grid-3">
         <div class="form-group">
             <label title="Cột 59 (Excel)">Kết quả khám thính lực tai trái (nói thường)</label>
             <input type="text" id="f_59" class="form-control" placeholder="Nhập kết quả khám thính lực tai trái (nói thường)" value="5">
@@ -418,7 +431,25 @@
             <label title="Cột 63 (Excel)">Các bệnh về tai mũi họng (nếu có)</label>
             <input type="text" id="f_63" class="form-control" placeholder="Nhập các bệnh về tai mũi họng (nếu có)" >
         </div>
-    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">G. Răng - Hàm - Mặt</h4><div class="grid-3">
+    
+        <div class="form-group">
+            <label title="Cột 64 (Excel)">Kết luận về tai - mũi - họng</label>
+            <div style="position: relative;">
+                <select id="f_64_select" class="form-control"
+                    onchange="document.getElementById('f_64').value = this.value"
+                    oninput="document.getElementById('f_64').value = this.value">
+                    <option value="">-- Chọn phân loại --</option>
+                    <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
+                    <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
+                    <option value="Loại III (Trung bình)">Loại III (Trung bình)</option>
+                    <option value="Loại IV (Yếu)">Loại IV (Yếu)</option>
+                    <option value="Loại V (Rất yếu)">Loại V (Rất yếu)</option>
+                </select>
+                <input type="text" id="f_64" class="form-control" placeholder="Nhập kết luận về tai - mũi - họng"
+                    style="position: absolute; left: 1px; top: 1px; width: calc(100% - 35px); height: calc(100% - 2px); border: none; box-shadow: none; border-radius: 5px 0 0 5px; outline: none; background: #fff;" >
+            </div>
+        </div>
+        </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"><h4 class="sub-title" style="margin-top: 10px;">G. Răng - Hàm - Mặt</h4><div class="grid-3">
         <div class="form-group">
             <label title="Cột 65 (Excel)">Kết quả khám hàm trên</label>
             <input type="text" id="f_65" class="form-control" placeholder="Nhập kết quả khám hàm trên" value="sức nhai ...%">
@@ -433,7 +464,25 @@
             <label title="Cột 67 (Excel)">Các bệnh về răng-hàm-mặt (nếu có)</label>
             <input type="text" id="f_67" class="form-control" placeholder="Nhập các bệnh về răng-hàm-mặt (nếu có)" >
         </div>
-    </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"></div>
+    
+        <div class="form-group">
+            <label title="Cột 68 (Excel)">Kết luận về răng - hàm - mặt</label>
+            <div style="position: relative;">
+                <select id="f_68_select" class="form-control"
+                    onchange="document.getElementById('f_68').value = this.value"
+                    oninput="document.getElementById('f_68').value = this.value">
+                    <option value="">-- Chọn phân loại --</option>
+                    <option value="Loại I (Rất khỏe)">Loại I (Rất khỏe)</option>
+                    <option value="Loại II (Khỏe)">Loại II (Khỏe)</option>
+                    <option value="Loại III (Trung bình)">Loại III (Trung bình)</option>
+                    <option value="Loại IV (Yếu)">Loại IV (Yếu)</option>
+                    <option value="Loại V (Rất yếu)">Loại V (Rất yếu)</option>
+                </select>
+                <input type="text" id="f_68" class="form-control" placeholder="Nhập kết luận về răng - hàm - mặt"
+                    style="position: absolute; left: 1px; top: 1px; width: calc(100% - 35px); height: calc(100% - 2px); border: none; box-shadow: none; border-radius: 5px 0 0 5px; outline: none; background: #fff;" >
+            </div>
+        </div>
+        </div><hr style="border: none; border-top: 1px dashed var(--border); margin: 20px 0;"></div>
                 <div id="tab-canlamsang" class="panel"><h3 class="section-title">Cận lâm sàng</h3><div class="grid-4">
         <div class="form-group">
             <label title="Cột 69 (Excel)">Chỉ số hồng cầu</label>
