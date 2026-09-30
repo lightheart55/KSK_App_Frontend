@@ -80,10 +80,36 @@
                 
                 <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
                     <div style="display: flex; align-items: center; gap: 20px;">
-                        <button onclick="dedupRecords()" id="btn-dedup" style="background: #ef4444; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px;">
-                            🧹 Dọn Dẹp Hồ Sơ Trùng Lặp
+                        <button onclick="findDuplicates()" id="btn-find-dups" style="background: #ef4444; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 16px;">
+                            🧹 Quét Hồ Sơ Trùng Lặp
                         </button>
-                        <span style="color: #991b1b; font-size: 14px;">⚠️ Quét toàn bộ dữ liệu, tự động xóa các dòng trùng CCCD cũ hơn, giữ lại dòng mới nhất.</span>
+                        <span style="color: #991b1b; font-size: 14px;">⚠️ Quét toàn bộ dữ liệu để tìm các dòng có cùng CCCD. Cần tự tick dòng muốn xóa!</span>
+                    </div>
+                    
+                    <div id="dups-container" style="display: none; margin-top: 20px;">
+                        <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 10px; color: #b45309; border-radius: 4px; margin-bottom: 15px; font-weight: 500;">
+                            ⚠️ Phát hiện hồ sơ trùng lặp. Mỗi nhóm: chỉ tick <u style="font-weight: bold;">dòng muốn xóa</u> (dòng còn lại sẽ giữ lại). Sau đó bấm "Xóa Các Dòng Đã Chọn".
+                        </div>
+                        <div style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 4px;">
+                            <table class="ts-table" style="width: 100%; border-spacing: 0;">
+                                <thead style="background: #1f2937; color: white; position: sticky; top: 0;">
+                                    <tr>
+                                        <th style="padding: 10px; text-align: center;">XÓA</th>
+                                        <th style="padding: 10px; text-align: center;">DÒNG</th>
+                                        <th style="padding: 10px; text-align: left;">HỌ VÀ TÊN</th>
+                                        <th style="padding: 10px; text-align: center;">NGÀY SINH</th>
+                                        <th style="padding: 10px; text-align: center;">CCCD</th>
+                                        <th style="padding: 10px; text-align: center;">KHU PHỐ</th>
+                                        <th style="padding: 10px; text-align: center;">LINK GSHEET</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dups-tbody" style="background: white;">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 15px; text-align: right;">
+                            <button onclick="deleteSelectedDuplicates()" id="btn-del-dups" class="btn btn-danger" style="padding: 10px 20px; font-size: 15px; font-weight: bold;">Xóa Các Dòng Đã Chọn</button>
+                        </div>
                     </div>
                 </div>
 
@@ -1069,20 +1095,93 @@
             if(res.success) loadUsers();
         }
         
-        async function dedupRecords() {
-            if(!confirm('CẢNH BÁO: Hành động này sẽ tự động xóa tất cả các hồ sơ có CCCD trùng lặp, chỉ giữ lại hồ sơ MỚI NHẤT. Bạn có muốn tiếp tục?')) return;
-            const btn = document.getElementById('btn-dedup');
-            btn.innerText = "Đang dọn dẹp... (Có thể mất 10-30s)";
+        async function findDuplicates() {
+            const btn = document.getElementById('btn-find-dups');
+            btn.innerText = "Đang quét...";
             btn.disabled = true;
             
-            const token = localStorage.getItem('token');
             try {
-                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({action: 'dedupRecords', token: token}) }).then(r => r.json());
-                alert(res.message);
+                const token = localStorage.getItem('token');
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'findDuplicates', token: token })
+                }).then(r => r.json());
+                
+                if (res.success) {
+                    const tbody = document.getElementById('dups-tbody');
+                    tbody.innerHTML = '';
+                    let html = '';
+                    
+                    if (res.duplicates.length === 0) {
+                        html = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Không tìm thấy hồ sơ trùng lặp nào.</td></tr>';
+                    } else {
+                        res.duplicates.forEach((dupGroup, groupIndex) => {
+                            const bgColor = groupIndex % 2 === 0 ? '#fdf2f8' : '#f0fdf4';
+                            
+                            dupGroup.records.forEach(rec => {
+                                const link = `https://docs.google.com/spreadsheets/d/1CMpd1EYUCjcU4zEQFLvJNRuzfc1Ru2SOJ59XS6_00oI/edit?gid=${rec.sheetId}&range=A${rec.row}`;
+                                html += `<tr style="background: ${bgColor}">
+                                    <td style="text-align: center;"><input type="checkbox" class="dup-checkbox" data-sheet="${rec.sheetName}" data-row="${rec.row}"></td>
+                                    <td style="text-align: center; font-weight: bold;">${rec.row}</td>
+                                    <td>${rec.hoTen}</td>
+                                    <td style="text-align: center;">${rec.ngaySinh}</td>
+                                    <td style="text-align: center; font-weight: bold;">${rec.cccd}</td>
+                                    <td style="text-align: center;">${rec.sheetName}</td>
+                                    <td style="text-align: center;"><a href="${link}" target="_blank" style="color: blue; text-decoration: underline;">Mở Dòng ${rec.row}</a></td>
+                                </tr>`;
+                            });
+                        });
+                    }
+                    
+                    tbody.innerHTML = html;
+                    document.getElementById('dups-container').style.display = 'block';
+                } else {
+                    alert('Lỗi: ' + res.message);
+                }
             } catch (err) {
                 alert('Lỗi kết nối Server');
             }
-            btn.innerText = "🧹 Dọn Dẹp Hồ Sơ Trùng Lặp";
+            
+            btn.innerText = "🧹 Quét Hồ Sơ Trùng Lặp";
+            btn.disabled = false;
+        }
+
+        async function deleteSelectedDuplicates() {
+            const checkboxes = document.querySelectorAll('.dup-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert("Vui lòng chọn ít nhất 1 dòng để xóa.");
+                return;
+            }
+            if (!confirm(`Bạn chắc chắn muốn xóa ${checkboxes.length} dòng này khỏi Google Sheets? Hành động này không thể hoàn tác!`)) return;
+            
+            const btn = document.getElementById('btn-del-dups');
+            btn.innerText = "Đang xóa...";
+            btn.disabled = true;
+            
+            const rowsToDelete = Array.from(checkboxes).map(cb => ({
+                sheetName: cb.getAttribute('data-sheet'),
+                row: parseInt(cb.getAttribute('data-row'))
+            }));
+            
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'deleteDuplicateRows', token: token, rowsToDelete: rowsToDelete })
+                }).then(r => r.json());
+                
+                if (res.success) {
+                    alert(res.message);
+                    findDuplicates();
+                    loadStats();
+                } else {
+                    alert('Lỗi: ' + res.message);
+                }
+            } catch(e) {
+                alert('Lỗi kết nối Server');
+            }
+            
+            btn.innerText = "Xóa Các Dòng Đã Chọn";
             btn.disabled = false;
         }
 
