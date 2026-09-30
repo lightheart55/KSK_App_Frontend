@@ -41,11 +41,21 @@
             </div>
 
             <div id="tab-thongke" class="panel active">
-                <div style="background: var(--primary); padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; color: white; display: flex; align-items: center; gap: 10px;">
-                    <span style="font-size: 20px;">📊</span>
-                    <strong style="font-size: 16px;">Thống Kê Lượt Khám Theo KHÓM</strong>
+                <div style="margin-bottom: 20px;">
+                    <h3 class="section-title" style="margin: 0; border: none; padding: 0;">Thống kê tổng quan</h3>
                 </div>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Xem và tải danh sách lượt Khám theo từng khóm.</p>
+                
+                <div class="grid-3" id="stats-grid-container" style="margin-bottom: 30px;">
+                    <p style="color: var(--text-muted);">Đang tải dữ liệu...</p>
+                </div>
+                
+                <hr style="border: 0; border-top: 1px dashed #cbd5e1; margin: 30px 0;">
+
+                <div onclick="loadStats()" style="background: var(--primary); padding: 12px 20px; border-radius: 8px; margin-bottom: 15px; color: white; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" title="Click để làm mới dữ liệu">
+                    <span style="font-size: 20px;">🔄</span>
+                    <strong style="font-size: 16px;">Tải Danh sách Thống Kê Theo KHU PHỐ (Click để Làm mới)</strong>
+                </div>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Xem và tải danh sách hồ sơ theo từng khu phố.</p>
                 
                 <table class="ts-table" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; border-spacing: 0;">
                     <thead style="background: #e0f2fe; color: var(--text-main);">
@@ -638,13 +648,14 @@
             }
         };
 
+        let statsLoaded = false;
         function switchTab(tabId) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
             
-            if (tabId === 'tab-thongke') {
+            if (tabId === 'tab-thongke' && !statsLoaded) {
                 loadStats();
             }
         }
@@ -766,10 +777,14 @@
         }
 
         async function loadStats() {
+            statsLoaded = true;
             const token = localStorage.getItem('token');
             if(!token) return;
             const tbody = document.getElementById('stats-tbody');
+            const grid = document.getElementById('stats-grid-container');
+            
             tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color: var(--text-muted);">Đang tải dữ liệu từ Google Sheet...</td></tr>';
+            grid.innerHTML = '<p style="color: var(--text-muted);">Đang tải dữ liệu...</p>';
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
@@ -779,20 +794,27 @@
                 
                 if(res.success) {
                     const khoms = [
-                        {id: 'thuận an', label: 'Thuận An', icon: '🏠'},
-                        {id: 'thuận nghĩa', label: 'Thuận Nghĩa', icon: '🏠'},
-                        {id: 'thuận phú', label: 'Thuận Phú', icon: '🏠'},
-                        {id: 'thuận trung', label: 'Thuận Trung', icon: '🏠'},
-                        {id: 'thuận phát', label: 'Thuận Phát', icon: '🏠'}
+                        {id: 'thuận an', label: 'Thuận An', icon: '🏠', color: '#fef3c7'},
+                        {id: 'thuận nghĩa', label: 'Thuận Nghĩa', icon: '🏠', color: '#d1fae5'},
+                        {id: 'thuận phú', label: 'Thuận Phú', icon: '🏠', color: '#e0e7ff'},
+                        {id: 'thuận trung', label: 'Thuận Trung', icon: '🏠', color: '#ffedd5'},
+                        {id: 'thuận phát', label: 'Thuận Phát', icon: '🏠', color: '#fce7f3'}
                     ];
                     
-                    let html = '';
+                    let htmlTable = '';
+                    let htmlGrid = `<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border);">
+                        <div style="background: #eef2ff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">🩺</div>
+                        <h4 style="margin:0 0 10px 0; color: var(--text-muted);">Tổng lượt khám</h4>
+                        <h2 style="margin:0; color: var(--primary); font-size: 36px;">${res.total}</h2>
+                    </div>`;
+
                     khoms.forEach(k => {
                         const stat = res.stats[k.id] || {count: 0, gid: 0};
                         const count = stat.count || 0;
                         const gid = stat.gid || 0;
                         
-                        html += `
+                        // Append to table
+                        htmlTable += `
                         <tr style="border-bottom: 1px solid var(--border);">
                             <td style="padding: 15px; border-bottom: 1px solid var(--border);">${k.icon} ${k.label}</td>
                             <td style="padding: 15px; border-bottom: 1px solid var(--border); text-align: center; font-weight: 600; color: var(--primary); border-left: 1px solid var(--border); border-right: 1px solid var(--border);">${count} hồ sơ</td>
@@ -801,10 +823,17 @@
                             </td>
                         </tr>
                         `;
+                        
+                        // Append to grid
+                        htmlGrid += `<div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border);">
+                            <div style="background: ${k.color}; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px;">📍</div>
+                            <h4 style="margin:0 0 10px 0; color: var(--text-muted);">${k.label}</h4>
+                            <h2 style="margin:0; color: var(--text-main); font-size: 28px;">${count}</h2>
+                        </div>`;
                     });
                     
-                    // Thêm dòng Tổng Cộng
-                    html += `
+                    // Add TOTAL row to table
+                    htmlTable += `
                     <tr style="background: #e0ffff;">
                         <td style="padding: 15px; font-weight: 700; color: var(--text-main);">TỔNG CỘNG</td>
                         <td style="padding: 15px; text-align: center; font-weight: 700; color: #dc2626; font-size: 16px; border-left: 1px solid var(--border); border-right: 1px solid var(--border);">${res.total} hồ sơ</td>
@@ -814,12 +843,15 @@
                     </tr>
                     `;
                     
-                    tbody.innerHTML = html;
+                    tbody.innerHTML = htmlTable;
+                    grid.innerHTML = htmlGrid;
                 } else {
                     tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi: ${res.message || res.error}</td></tr>`;
+                    grid.innerHTML = `<p style="color:red">Lỗi: ${res.message || res.error}</p>`;
                 }
             } catch (err) {
                 tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi kết nối Server</td></tr>`;
+                grid.innerHTML = `<p style="color:red">Lỗi kết nối Server</p>`;
             }
         }
     </script>
