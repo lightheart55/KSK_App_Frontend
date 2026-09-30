@@ -84,6 +84,17 @@
                         <label>Dân tộc</label>
                         <input type="text" id="dan_toc" class="form-control" value="Kinh">
                     </div>
+                    <div>
+                        <label>Khóm (*)</label>
+                        <select id="khom" class="form-control" required>
+                            <option value="">-- Chọn --</option>
+                            <option value="Thuận An">Thuận An</option>
+                            <option value="Thuận Nghĩa">Thuận Nghĩa</option>
+                            <option value="Thuận Phú">Thuận Phú</option>
+                            <option value="Thuận Trung">Thuận Trung</option>
+                            <option value="Thuận Phát">Thuận Phát</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -234,19 +245,26 @@
             btn.innerText = "Đang lưu...";
             msg.innerText = "";
 
-            // Thu thập data (Có thể map các id tương ứng cột trong excel)
-            const formData = [
-                document.getElementById('ma_cskcb').value,
-                document.getElementById('ngay_kham').value,
-                document.getElementById('ho_ten').value,
-                document.getElementById('gioi_tinh').value,
-                document.getElementById('ngay_sinh').value,
-                document.getElementById('cccd').value,
-                document.getElementById('dien_thoai').value,
-                document.getElementById('ts_tha').value,
-                document.getElementById('phan_loai_sk').value
-                // ... Thêm các trường còn lại
-            ];
+            // Thu thập data map thành object
+            const formData = {
+                ma_cskcb: document.getElementById('ma_cskcb').value,
+                ngay_kham: document.getElementById('ngay_kham').value,
+                ho_ten: document.getElementById('ho_ten').value,
+                gioi_tinh: document.getElementById('gioi_tinh').value,
+                ngay_sinh: document.getElementById('ngay_sinh').value,
+                cccd: document.getElementById('cccd').value,
+                dien_thoai: document.getElementById('dien_thoai').value,
+                ts_tha: document.getElementById('ts_tha').value,
+                ts_dtd: document.getElementById('ts_dtd').value,
+                chieu_cao: document.getElementById('chieu_cao').value,
+                can_nang: document.getElementById('can_nang').value,
+                huyet_ap: document.getElementById('huyet_ap').value,
+                kham_noi: document.getElementById('kham_noi').value,
+                kham_ngoai: document.getElementById('kham_ngoai').value,
+                phan_loai_sk: document.getElementById('phan_loai_sk').value,
+                ket_luan_benh: document.getElementById('ket_luan_benh').value,
+                khom: document.getElementById('khom').value
+            };
 
             const token = localStorage.getItem('token');
             
