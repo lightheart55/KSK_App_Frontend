@@ -1,0 +1,8 @@
+# Ensure consistent encoding for all files
+* text=auto eol=lf
+
+# HTML and JS always UTF-8, no line ending conversion
+*.html text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.json text eol=lf
