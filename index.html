@@ -77,7 +77,7 @@
                 <div style="margin-top: 20px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <div>
                         <strong style="color: #166534;">📊 Sheet TỔNG 05</strong>
-                        <p style="margin: 4px 0 0; color: #15803d; font-size: 14px;">Trước khi tải Excel tổng hợp, cần đồng bộ dữ liệu từ 5 sheet khóm vào sheet TỔNG 05 trước.</p>
+                        <p style="margin: 4px 0 0; color: #15803d; font-size: 14px;">Bấm Đồng bộ để gom dữ liệu 5 sheet vào TỔNG 05, rồi bấm Tải Excel để tải đủ 6 sheet.</p>
                     </div>
                     <div style="display: flex; gap: 10px; flex-shrink: 0;">
                         <button onclick="syncTong05()" id="btn-sync-tong" style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px;">🔄 Đồng bộ TỔNG 05</button>
@@ -832,7 +832,7 @@
         }
 
         async function login() {
-            const u = document.getElementById('username').value.trim().toLowerCase();
+            const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
             const msg = document.getElementById('login-msg');
             
@@ -1198,29 +1198,25 @@
 
         async function syncTong05() {
             const btn = document.getElementById('btn-sync-tong');
-            btn.innerText = 'Đang đồng bộ... (có thể mất 30s)';
+            btn.innerText = 'Dang dong bo... (30s)';
             btn.disabled = true;
-            
             try {
                 const token = localStorage.getItem('token');
                 const res = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: 'syncTong05', token: token })
-                }).then(r => r.json());
-                
+                }).then(function(r) { return r.json(); });
                 if (res.success) {
-                    alert('✅ ' + res.message + '
-Bây giờ bạn có thể bấm "Tải Excel Tất Cả" để tải file tổng hợp!');
+                    alert(res.message);
                     loadStats();
                 } else {
-                    alert('❌ Lỗi: ' + (res.message || res.error));
+                    alert('Loi: ' + (res.message || res.error));
                 }
             } catch (err) {
-                alert('❌ Lỗi kết nối Server: ' + err);
+                alert('Loi ket noi Server: ' + err);
             }
-            
-            btn.innerText = '🔄 Đồng bộ TỔNG 05';
+            btn.innerText = '🔄 Dong bo TONG 05';
             btn.disabled = false;
         }
 
@@ -1295,12 +1291,12 @@ Bây giờ bạn có thể bấm "Tải Excel Tất Cả" để tải file tổn
                     tbody.innerHTML = htmlTable;
                     grid.innerHTML = htmlGrid;
                 } else {
-                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi: ' + (res.message || res.error) + '</td></tr>';
-                    grid.innerHTML = '<p style="color:red">Lỗi: ' + (res.message || res.error) + '</p>';
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi: ${res.message || res.error}</td></tr>`;
+                    grid.innerHTML = `<p style="color:red">Lỗi: ${res.message || res.error}</p>`;
                 }
             } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi kết nối Server</td></tr>';
-                grid.innerHTML = '<p style="color:red">Lỗi kết nối Server</p>';
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi kết nối Server</td></tr>`;
+                grid.innerHTML = `<p style="color:red">Lỗi kết nối Server</p>`;
             }
         }
     </script>
