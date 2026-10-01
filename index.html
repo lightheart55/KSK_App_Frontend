@@ -1295,12 +1295,12 @@ Bây giờ bạn có thể bấm "Tải Excel Tất Cả" để tải file tổn
                     tbody.innerHTML = htmlTable;
                     grid.innerHTML = htmlGrid;
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi: ${res.message || res.error}</td></tr>`;
-                    grid.innerHTML = `<p style="color:red">Lỗi: ${res.message || res.error}</p>`;
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi: ' + (res.message || res.error) + '</td></tr>';
+                    grid.innerHTML = '<p style="color:red">Lỗi: ' + (res.message || res.error) + '</p>';
                 }
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi kết nối Server</td></tr>`;
-                grid.innerHTML = `<p style="color:red">Lỗi kết nối Server</p>`;
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color:red">Lỗi kết nối Server</td></tr>';
+                grid.innerHTML = '<p style="color:red">Lỗi kết nối Server</p>';
             }
         }
     </script>
